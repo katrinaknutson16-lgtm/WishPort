@@ -179,3 +179,26 @@
   padding: 11px 3px;
   line-height: 1.2;
 }
+
+/* WishPort 2026-11-11: concise welcome, order guide, collapsible catalog filters */
+.wpWelcome{padding:16px 18px}
+.wpWelcome>strong{font-size:clamp(17px,2.9vw,21px)}
+.wpWelcome>p{font-size:clamp(13px,2.7vw,15px);line-height:1.45;margin:7px 0 10px;color:inherit}
+.wpHowTo{margin-top:10px;border-top:1px solid var(--line,#675280);padding-top:9px}
+.wpHowTo>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 2px;font-weight:750;color:inherit;touch-action:manipulation}
+.wpHowTo>summary::-webkit-details-marker,.wpFilterDisclosure>summary::-webkit-details-marker{display:none}
+.wpHowTo>summary::after{content:'+';font-size:22px;font-weight:500;flex:none}
+.wpHowTo[open]>summary::after{content:'−'}
+.wpSummaryHint{font-size:12px;opacity:.7;font-weight:500;margin-left:auto}
+.wpHowToBody{font-size:14px;line-height:1.55;padding:5px 3px 10px;color:inherit}
+.wpHowToBody ol{margin:3px 0 13px;padding-left:22px}
+.wpHowToBody li{margin-bottom:10px;padding-left:3px}
+.wpGuideNote{margin:10px 0 0;border:1px solid #8e6dac55;border-radius:12px;padding:11px 13px;background:#8e6dac12;font-size:13px;line-height:1.5}
+.wpFilterDisclosure{margin:0 0 16px;border:1px solid #9979ba55;border-radius:18px;background:#9676b71a;overflow:hidden;color:inherit}
+.wpFilterDisclosure>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;padding:14px 17px;font-size:15px;font-weight:750;touch-action:manipulation}
+.wpFilterDisclosure>summary::after{content:'+';font-size:22px;font-weight:500;margin-left:auto}
+.wpFilterDisclosure[open]>summary::after{content:'−'}
+.wpFilterHint{font-size:12px;opacity:.72;font-weight:500}
+.wpFilterHint span{display:none}
+.wpFilterDisclosure .explorerFilterPanel{margin:0;border:0;border-top:1px solid #9979ba55;box-shadow:none;border-radius:0;background:transparent}
+@media(max-width:420px){.wpFilterDisclosure>summary{padding:13px 12px}.wpFilterHint{width:100%;order:3}}
