@@ -1,26 +1,9 @@
-WISHPORT — CLEAN EXPLORER LAYOUT (NOVEMBER 2026)
+WISHPORT EXPANDED CATALOG — 2026-11-11
 
-WHAT CHANGED
-- Database and Collections remain at the top (alongside Categories and Villagers).
-- Search and cart are directly underneath the main tabs.
-- Removed the horizontal quick-filter chips for Materials, DIY, etc.
-- All category choices, including Materials and DIY Recipes, are in the Category Selection dropdown.
-- Filters follow: Category, Theme, Series, Interaction/Item Type, Colour.
-- Pagination navigation is displayed above and below the item cards.
-- Items per page and jump-to-page controls remain below the catalog.
+Upload all seven website files in this ZIP to your GitHub repository root, including the NEW catalog-expansion.js file. The script expands distinct image variations from the existing community ACNH spreadsheet-derived dataset. No new unverified item names have been invented.
 
-WHAT DID NOT CHANGE
-- Item database, item codes, image URLs, DIY candidate validation, Villager requests, and 40-slot cart logic.
-- Existing order generator still requires testing with your bot, especially item variations and DIY metadata.
+The catalog has about 26,177 variation listings, including recipe entries, while the other builder in your screenshot appears to show 26,602. This is not a claim that the missing ~425 entries have been verified or are safe to order.
 
-TO PUBLISH
-Upload index.html, style.css, app.js, catalog-data.js and villagers-data.js to the root of your existing WishPort GitHub repository, replacing files with the same names. Keep Github Pages configured to main/(root).
+One-axis color variants generate 16-character metadata codes. Two-axis color-plus-pattern variations are browse-only (except default) until their metadata is verified to avoid unsafe commands. Keep SysBot inventory metadata validation enabled. Test any encoded order with your bot.
 
-
-COLLECTION COVER UPDATE
-The Collections page now shows one large real ACNH item picture per collection.
-Images are sourced from the uploaded item catalog (acnhcdn image URLs).
-The image is a representative item from that collection, not a screenshot of
-the entire 40-item arrangement. Missing images show an honest fallback.
-Optional custom verified cover images can be added via `coverImage` in app.js.
-All six website files are included for simple replacement on GitHub Pages.
+The screenshot comparison is based on listings, not distinct item names: an item in multiple colors can occupy many pages. Credit: https://nookipedia.com/wiki/Community:ACNH_Spreadsheet

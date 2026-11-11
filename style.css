@@ -132,3 +132,5 @@
 .collectionCoverFallback{color:#655377;font-size:14px;font-weight:700;text-align:center;padding:24px}
 .collectionCoverTag{position:absolute;bottom:13px;left:14px;border-radius:30px;background:#fffef0ed;color:#584579;padding:7px 11px;font-size:10px;font-weight:850;letter-spacing:.6px}
 @media(min-width:620px){.collectionCover{height:270px}}
+
+.variationCaption{font-size:.87rem;font-weight:750;color:#ad86dd;margin:.12rem 0 .4rem}.expandedInfo{font-size:.9rem;color:var(--muted,#aa9ac2);line-height:1.5;margin:10px 2px}.item button[disabled]{opacity:.6;cursor:not-allowed}
