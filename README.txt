@@ -15,3 +15,12 @@ WHAT DID NOT CHANGE
 
 TO PUBLISH
 Upload index.html, style.css, app.js, catalog-data.js and villagers-data.js to the root of your existing WishPort GitHub repository, replacing files with the same names. Keep Github Pages configured to main/(root).
+
+
+COLLECTION COVER UPDATE
+The Collections page now shows one large real ACNH item picture per collection.
+Images are sourced from the uploaded item catalog (acnhcdn image URLs).
+The image is a representative item from that collection, not a screenshot of
+the entire 40-item arrangement. Missing images show an honest fallback.
+Optional custom verified cover images can be added via `coverImage` in app.js.
+All six website files are included for simple replacement on GitHub Pages.

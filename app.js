@@ -116,9 +116,38 @@ const collections=definitions.map((d,index)=>{
  const matched=items.filter(x=>permissible.has(x.category)&&!blocked.test(x.name)&&d.terms.test(x.name));
  const unique=new Map();matched.forEach(x=>{if(!unique.has(x.name.toLowerCase()))unique.set(x.name.toLowerCase(),x)});
  // Every preset uses 40 genuine, distinct catalog entries and remains stable between visits.
- return {...d,items:[...unique.values()].slice(0,40),id:index};
+ const pack=[...unique.values()].slice(0,40);
+ return {...d,items:pack,id:index};
 });
-function renderCollections(){const q=$('collectionSearch').value.trim().toLowerCase();const shown=collections.filter(x=>x.name.toLowerCase().includes(q)||x.description.toLowerCase().includes(q));$('collectionsGrid').innerHTML=shown.length?shown.map(c=>`<article class="collectionCard"><div class="collectionArt" style="background:${c.color}" aria-hidden="true"><span class="collectionLabel">${esc(c.name)}</span></div><div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.description)}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div></div></article>`).join(''):'<div class="empty">No collections match that search.</div>';}
+// One large real catalog image per collection. The image is an illustrative featured
+// ITEM from this collection, not a fabricated screenshot of an entire room.
+// To use a bespoke licensed room cover later, set a verified coverImage URL on
+// a definition; otherwise this uses one item photo from the existing catalog.
+const featuredCoverNames={
+ 'Cozy Cottagecore':['garden bench','garden lantern','log bench'],
+ 'Starry Night':['crescent-moon chair','nova light','moon'],
+ 'Pretty in Pink':['cute sofa','cute bed','dreamy bed'],
+ 'Cafe & Bakery':['espresso maker','coffee grinder','cafe-curtain wall'],
+ 'Spooky Island':['spooky arch','spooky tower','spooky lantern'],
+ 'Dream Bathroom':['claw-foot tub','long bathtub','shower booth'],
+ 'Japanese Garden':['bamboo bench','deer scare','stone lion-dog'],
+ 'Holiday Lights':['illuminated tree','festive tree','big festive tree'],
+ 'Elegant Living Room':['elegant sofa','antique sofa','antique bureau']
+};
+function collectionCover(c){
+ if(c.coverImage) return {src:c.coverImage,name:c.name};
+ const candidates=featuredCoverNames[c.name]||[];
+ // Select a real item belonging to this collection, never an unrelated icon.
+ let featured=candidates.map(n=>c.items.find(i=>i.name.toLowerCase()===n && i.image)).find(Boolean);
+ if(!featured) featured=c.items.find(i=>i.image);
+ return featured?{src:featured.image,name:featured.name}:null;
+}
+function coverMarkup(c){
+ const cover=collectionCover(c);
+ const alt=cover ? `Actual ACNH item preview: ${cover.name}` : `${c.name} collection`;
+ return `<div class="collectionCover" style="--collection-bg:${c.color}">${cover?`<img loading="lazy" decoding="async" src="${esc(cover.src)}" alt="${esc(alt)}" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="collectionCoverFallback" hidden>Preview image unavailable</span>`:'<span class="collectionCoverFallback">Preview image unavailable</span>'}<span class="collectionCoverTag">FEATURED ITEM PREVIEW</span></div>`;
+}
+function renderCollections(){const q=$('collectionSearch').value.trim().toLowerCase();const shown=collections.filter(x=>x.name.toLowerCase().includes(q)||x.description.toLowerCase().includes(q));$('collectionsGrid').innerHTML=shown.length?shown.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.description)}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div></div></article>`).join(''):'<div class="empty">No collections match that search.</div>';}
 let selectedCollection=null;
 $('collectionsGrid').onclick=e=>{const b=e.target.closest('[data-collection]');if(!b)return;selectedCollection=collections[+b.dataset.collection];$('collectionTitle').textContent=selectedCollection.name;$('collectionDescription').textContent=selectedCollection.description;$('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div><span>${i+1}.</span>${esc(x.name)}</div>`).join('');$('addCollection').textContent='Add '+selectedCollection.items.length+' items to pocket';show('collectionModal');};
 $('collectionSearch').oninput=renderCollections;
