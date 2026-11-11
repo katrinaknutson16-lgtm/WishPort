@@ -1,19 +1,13 @@
-WISHPORT — FIVE USER-FRIENDLINESS IMPROVEMENTS
+WISHPORT — POCKET INVENTORY ORDER PAGE REDESIGN
 
-UPLOAD ONLY THESE THREE FILES TO THE MAIN WishPort GITHUB REPOSITORY FOLDER:
-  index.html
-  style.css
-  wishport-help.js   (new file)
+Upload BOTH files to the ROOT of your WishPort GitHub repository:
+- index.html (replaces existing)
+- order-layout.css (new file)
 
-Do not upload the ZIP directly. Do not replace app.js, catalog files, presets, villagers, or collection-covers.
+Do not upload build.py or replace app.js, catalog data, collection presets, or cover images.
 
-Added:
-1. Help / FAQ (collapsed, under the welcome section)
-2. Back to Top floating button, visible when scrolling
-3. Report a Problem with copyable text and optional .txt download (not automatically sent)
-4. More compact cart item cards with large touch controls
-5. Dismissible first-time visitor tip (remembered on the same browser)
+This changes only the cart/order page layout. Quantity buttons, item image selection, filler options, save/load orders, copy command, Help, and validation remain wired to your existing app.js.
 
-The report tool does NOT transmit information to a server. Members must paste their report into Discord or message a moderator. No support channel or email is assumed.
+After GitHub Pages deploys: refresh the website, open View Order, and test the + / - buttons, filler choices, Save/Load, and Copy order command.
 
-After committing the files to GitHub, open the live site and check the FAQ, copy-report, tip, back-to-top and item-card layout. Existing bot validation and order logic are unchanged.
+Keep the README locally; it does not need to be uploaded.
