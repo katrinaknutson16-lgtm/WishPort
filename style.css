@@ -164,3 +164,18 @@
 .presetItem img{height:36px;width:36px;object-fit:contain;flex:none}
 .presetItem code{font-size:10px;overflow-wrap:anywhere;color:#967bb4}
 @media(min-width:620px){.realRoomCover{height:auto;aspect-ratio:16/10}}
+
+/* WishPort navigation: three evenly sized tabs (Database, Collections, Villagers).
+   Keeps the rest of the website styling unchanged. */
+.browseTabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+}
+.browseTabs .browseTab {
+  min-width: 0;
+  min-height: 48px;
+  font-size: clamp(12px, 3.3vw, 16px);
+  padding: 11px 3px;
+  line-height: 1.2;
+}
