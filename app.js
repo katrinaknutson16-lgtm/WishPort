@@ -22,18 +22,37 @@ const stackSelections=new Map();
 const stackKey=item=>item.name+'|'+item.category;
 const selectedStacks=item=>stackSelections.get(stackKey(item))||1;
 function setStackSelection(item,n){stackSelections.set(stackKey(item),Math.max(1,Math.min(40,Math.floor(n))));}
-// Image URLs come from the exact item/variation row of the ACNH community spreadsheet.
-const imageURL=u=>u||'';
+// Keep exact item/variation images. Prefer the updated catalogue mirror for
+// 3.0 item URLs; some 3.0 files are absent from the original ACNH CDN.
+// This changes images only; order IDs, stack sizes and safety rules are untouched.
+const legacyImagePrefix='https://acnhcdn.com/latest/';
+const mirrorImagePrefix='https://nh-cdn.catalogue.ac/';
+const v3ImageURLs=new Set();
+for(const item of items){
+ if(!String(item.version||'').startsWith('3.'))continue;
+ if(item.image)v3ImageURLs.add(item.image);
+ if(item.images)for(const u of Object.values(item.images))if(u)v3ImageURLs.add(u);
+}
+const imageURL=u=>{
+ if(!u)return '';
+ return v3ImageURLs.has(u)&&u.startsWith(legacyImagePrefix)
+  ?u.replace(legacyImagePrefix,mirrorImagePrefix):u;
+};
 window.wishportImageError=function(img){
  if(!img||!img.dataset)return;
- const old=img.dataset.original||img.src;
- if(!img.dataset.failover&&old.startsWith('https://acnhcdn.com/latest/')){
+ const original=img.dataset.original||img.src;
+ if(img.dataset.failover!=='yes'){
    img.dataset.failover='yes';
-   img.src=old.replace('https://acnhcdn.com/latest/','https://nh-cdn.catalogue.ac/');
-   return;
+   // Try the alternate host if either is missing this particular asset.
+   const primary=img.src;
+   const alternate=primary.startsWith(mirrorImagePrefix)
+    ? original.startsWith(legacyImagePrefix)?original:primary.replace(mirrorImagePrefix,legacyImagePrefix)
+    : original.startsWith(legacyImagePrefix)?original.replace(legacyImagePrefix,mirrorImagePrefix):'';
+   if(alternate&&alternate!==primary){img.src=alternate;return;}
  }
- const missing=document.createElement('span');missing.className='noPhotoLabel';
- missing.textContent='Image unavailable';img.replaceWith(missing);
+ const missing=document.createElement('span');
+ missing.className='noPhotoLabel';missing.textContent='Image unavailable';
+ img.replaceWith(missing);
 };
 // WishPort explorer v4: filters are intentional suggestions, not authoritative gameplay classifications.
 const suggestedThemes=[['Cottagecore',/garden|wood|log|mushroom|cottage|forest|bamboo|plant|flower|hedge|farm|wheat|vine|rustic/i],['Celestial',/star|moon|nova|space|celeste|zodiac|galaxy|astronaut|meteor/i],['Spooky',/spooky|haunt|pumpkin|jack|grave|witch|halloween/i],['Festive',/festive|christmas|holiday|ornament|snow|toy day|jingle/i],['Beach',/shell|sand|beach|palm|tropical|surf|coconut/i],['Elegant',/elegant|antique|vintage|royal|golden|marble|imperial/i],['Cafe & Kitchen',/coffee|cafe|café|cake|kitchen|bread|bakery|tea|food/i],['Japanese',/zen|japanese|imperial|bonsai|shoji|tatami|sakura|bamboo/i],['Nintendo & Games',/mario|luigi|zelda|splatoon|nintendo|game|kirby|lego/i]];

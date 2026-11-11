@@ -1,7 +1,5 @@
-WishPort • 12 original ACNH room photo collections
+WishPort 3.0 image source update
 
-Upload ALL website files and the ENTIRE collection-covers folder to the root of the existing GitHub Pages repository. Keep original relative folders. index.html loads collection-presets.js BEFORE app.js.
+Upload ONLY app.js and index.html to the ROOT of the WishPort GitHub repository. Do not move or replace collection-covers, catalog-data.js, collection-presets.js, villagers-data.js or catalog-expansion.js.
 
-The 12 room pictures are unmodified screenshots provided by the user. The 40 hexadecimal item codes for each collection are preserved precisely as provided. If some catalog code cannot be matched to a display name, it is displayed using its internal code rather than guessed. Actual bot acceptance and image licensing were not independently verified.
-
-Note: if the images belong to other creators, obtain permission before using them on a public website.
+The patch prioritizes the catalogue mirror for 3.0 images and tries the legacy CDN if needed. Some 3.0 images are missing from both services and may still show Image unavailable. This patch does not verify every image and does not change any item codes or order safety checks.
