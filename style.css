@@ -47,3 +47,13 @@
 
 .releaseTag{display:inline-block;background:#f3eaff;color:#493174;border:1px solid #ded1ed;padding:6px 12px;border-radius:14px;font-size:.77rem;font-weight:750;margin:8px 0}
 .item .bottom{display:flex;flex-wrap:wrap;gap:7px}.item .bottom .add{flex:1 1 110px}.item .bottom .options{background:#f3ebff;color:#5f428a;border:1px solid #cbb7e4;border-radius:12px;padding:10px 9px;font-size:.84rem;font-weight:650;cursor:pointer}.item .bottom .fav{flex:0 0 auto}.item .bottom .justAdded{background:#3c8468!important;color:#fff!important}
+
+/* WishPort: touch-friendly full-stack picker */
+.stackPicker{margin:8px 0 12px;padding:10px;border:1px solid #dfd2ef;border-radius:12px;background:#f9f5ff}
+.stackHint{display:block;color:#62488a;font-size:12px;font-weight:700;margin-bottom:8px}
+.stackStepper{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.stackStepper button{width:38px;height:38px;display:grid;place-items:center;border:1px solid #bda7d8;border-radius:10px;background:white;color:#57368d;font-size:23px;font-weight:800;cursor:pointer}
+.stackStepper button:disabled{opacity:.35;cursor:default}
+.stackStepper output{min-width:26px;text-align:center;font-size:18px;font-weight:800;color:#382451}
+.stackStepper small{font-size:12px;color:#685981;white-space:normal}
+#modalStackCount{display:block;width:100%;padding:10px;border:1px solid #d2c3e4;border-radius:10px;font-size:16px;margin-top:6px}

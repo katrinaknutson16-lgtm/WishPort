@@ -1,15 +1,7 @@
-WishPort - Orderable Catalog Filter
+WISHPORT FULL-STACK QUANTITY SELECTOR — November 10, 2026
 
-This package updates the original WishPort website. Upload all six files to the MAIN directory of the existing GitHub repository, replacing the old files.
+For confirmed stackable materials (wood, hardwood, softwood, iron, stone, clay, and selected others), members can adjust a 1–40 full-stack quantity directly on the item card, then press Add Item once. The number of stacks is the number of 40 available pocket slots used. The command repeats the item hex code once for every chosen full stack. The selection is capped by remaining pocket slots; filler only occupies unused slots. Regular non-stackable items remain one-tap Add Item.
 
-Catalog rows in source: 7,802
-Candidate orderable items retained: 6,835
-Excluded: 967
+The display assumes the SysBot order system creates full stacks for recognized stackable items. The generated 4-character codes contain no quantity byte. Test a real material order against WishPort bot to verify it delivers full stacks for the exact item; the website alone cannot enforce stack quantities.
 
-Excluded groups: Construction (building exteriors/doors/bridges), Interior Structures (HHP building components), Plants (planted growth and dug-up plants), Fish, Insects, Sea Creatures. Also excluded named house-move/build kits, permits, progression unlocks, quest objects, dream-only tools, and items with no 4-character item code. Other transferable items, such as fences and DIY recipe cards, remain.
-
-IMPORTANT: Candidate status is a conservative filter, NOT validation that every item is supported by a given SysBot build. Some items with valid internal IDs may still be non-transferable. For exact color variants, plain four-digit codes may not encode customization details.
-
-If previously saved pocket items were removed by the new filter, they are automatically cleaned out on page load. WishPort's filler and villager sections remain.
-
-Source data: ACNH community data spreadsheet.
+Upload the six files to the root of your existing WishPort GitHub repository and replace the previous versions. Refresh the site in Safari.
