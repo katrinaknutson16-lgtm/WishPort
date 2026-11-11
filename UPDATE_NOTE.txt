@@ -1,0 +1,15 @@
+WishPort collection order validation and direct copy update
+
+Upload BOTH files to the root of your existing GitHub WishPort repository:
+- app.js
+- index.html
+
+This preserves your other website files, catalog, images, help FAQ, styles, and presets.
+
+Fix: The order generator now validates the exact selected item code rather than rejecting a valid collection item because a different catalog variation with the same name has preview-only status.
+
+Safety checks for invalid code formats, explicitly blocked codes, special untransferable items and recipe status on actual selected entries remain enabled. Your SysBot safety validation should remain on.
+
+The cart button is now 'Copy order command' with no intermediate review popup.
+
+After uploading, open a collection, tap Copy order command, and paste into a private draft to inspect the 40 codes before sending. Test with your bot before member rollout.

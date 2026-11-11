@@ -97,7 +97,7 @@ function hide(id){if(id==='cartModal'){const cart=$('cartModal');cart.hidden=tru
 const savePocket=()=>{try{localStorage.setItem('wishport_pocket',JSON.stringify(pocket))}catch(e){}};
 const lookupItem=x=>items.find(it=>it.name===x.name&&(it.category===x.category||!x.category)&&(!x.variation||it.variationPreset===x.variation)&&(!x.pattern||it.patternPreset===x.pattern))||items.find(it=>it.name===x.name&&(it.category===x.category||!x.category));
 const codeFor=x=>{if(x.hex && /^(?:[0-9A-F]{4}|[0-9A-F]{16}|0000[0-9A-F]{4}000016A2)$/i.test(x.hex))return x.hex;const entry=lookupItem(x);const v=x.variation||'',p=x.pattern||'';return isDIY(entry||x)?(entry?.orderHex||x.hex||''):(entry?.variantHex?.[v+'|'+p]||entry?.variantHex?.[v+'|']||x.hex||entry?.hex||'');};
-const makeCodes=()=>{if(pocket.some(x=>disallowedOrderEntry(lookupItem(x)||x)))return null;const codes=pocket.map(codeFor);if(codes.some(c=>!(/^[0-9A-F]{4}$/i.test(c)||/^(?:[0-9A-F]{16}|0000[0-9A-F]{4}000016A2)$/i.test(c))||DISALLOWED_CODES.has(String(c).toUpperCase())))return null;
+const makeCodes=()=>{if(pocket.some(x=>disallowedOrderEntry(x)))return null;const codes=pocket.map(codeFor);if(codes.some(c=>!(/^[0-9A-F]{4}$/i.test(c)||/^(?:[0-9A-F]{16}|0000[0-9A-F]{4}000016A2)$/i.test(c))||DISALLOWED_CODES.has(String(c).toUpperCase())))return null;
  const remain=40-codes.length;
  if(fillMode==='nmt')codes.push(...Array(remain).fill('0EF8'));
  if(fillMode==='crowns')codes.push(...Array(remain).fill('14BB'));
@@ -117,7 +117,7 @@ let namedOrders=readSavedOrders();
 const persistNamed=()=>{try{localStorage.setItem(SAVE_KEY,JSON.stringify(namedOrders))}catch(e){$('saveOrderNotice').textContent='Could not save. Browser storage may be full or disabled.';return false}return true};
 const renderSaved=()=>{const sel=$('savedOrderList'),current=sel.value;sel.innerHTML='<option value="">Choose a saved order…</option>'+namedOrders.map((o,i)=>'<option value="'+i+'">'+esc(o.name)+' ('+o.pocket.length+'/40)</option>').join('');if(current&&Number(current)<namedOrders.length)sel.value=current};
 $('saveNamedOrder').onclick=()=>{const name=$('saveOrderName').value.trim();if(!name){$('saveOrderNotice').textContent='Enter a name for your order.';return}if(!pocket.length){$('saveOrderNotice').textContent='Add at least one item before saving.';return}const idx=namedOrders.findIndex(o=>o.name.toLowerCase()===name.toLowerCase());if(idx!==-1&&!confirm('Replace your saved order named "'+name+'"?'))return;const record={name,pocket:JSON.parse(JSON.stringify(pocket)),fill:fillMode,villager:chosenVillager?{...chosenVillager}:null};if(idx!==-1)namedOrders.splice(idx,1);namedOrders.unshift(record);namedOrders=namedOrders.slice(0,20);if(persistNamed())$('saveOrderNotice').textContent='Saved "'+name+'" on this device.';renderSaved()};
-$('restoreSavedOrder').onclick=()=>{const n=$('savedOrderList').value;if(n==='')return;const o=namedOrders[Number(n)];if(!o)return;if(pocket.length&&!confirm('Replace your current order with "'+o.name+'"?'))return;const safe=o.pocket.filter(x=>!disallowedOrderEntry(lookupItem(x)||x)).slice(0,40);if(safe.length!==o.pocket.length){$('saveOrderNotice').textContent='Some saved items are no longer orderable and were not loaded.'}else $('saveOrderNotice').textContent='Loaded "'+o.name+'".';pocket=safe;fillMode=['default','nmt','crowns','bells'].includes(o.fill)?o.fill:'default';chosenVillager=o.villager&&/^[A-Za-z0-9]{3,12}$/.test(o.villager.id)?o.villager:null;savePocket();saveVillager();try{localStorage.setItem('wishport_fill',fillMode)}catch(e){}cart();renderSelectedVillager();renderVillagers()};
+$('restoreSavedOrder').onclick=()=>{const n=$('savedOrderList').value;if(n==='')return;const o=namedOrders[Number(n)];if(!o)return;if(pocket.length&&!confirm('Replace your current order with "'+o.name+'"?'))return;const safe=o.pocket.filter(x=>!disallowedOrderEntry(x)).slice(0,40);if(safe.length!==o.pocket.length){$('saveOrderNotice').textContent='Some saved items are no longer orderable and were not loaded.'}else $('saveOrderNotice').textContent='Loaded "'+o.name+'".';pocket=safe;fillMode=['default','nmt','crowns','bells'].includes(o.fill)?o.fill:'default';chosenVillager=o.villager&&/^[A-Za-z0-9]{3,12}$/.test(o.villager.id)?o.villager:null;savePocket();saveVillager();try{localStorage.setItem('wishport_fill',fillMode)}catch(e){}cart();renderSelectedVillager();renderVillagers()};
 $('deleteSavedOrder').onclick=()=>{const n=$('savedOrderList').value;if(n==='')return;const o=namedOrders[Number(n)];if(!o||!confirm('Delete saved order "'+o.name+'" from this device?'))return;namedOrders.splice(Number(n),1);persistNamed();renderSaved();$('saveOrderNotice').textContent='Saved order deleted.'};
 renderSaved();
 $('clear').onclick=()=>{if(!pocket.length&&!chosenVillager)return;if(!confirm('Clear all '+pocket.length+' selected item slots AND the requested villager? Saved named orders will not be deleted.'))return;pocket=[];chosenVillager=null;fillMode='default';savePocket();saveVillager();try{localStorage.setItem('wishport_fill','default')}catch(e){}cart();renderSelectedVillager();renderVillagers();$('copyMsg').textContent='Current order cleared. Your named saved orders are still available.'};
@@ -126,7 +126,7 @@ function openOrderReview(){
  if(!pocket.length)warnings.push('Select at least one item. Villager-only orders are not supported by this builder.');
  if(pocket.length>40)warnings.push('The order exceeds the 40-slot limit.');
  if(!codes||!txt)warnings.push('An item code failed validation. Remove unsupported items before copying.');
- if(pocket.some(x=>disallowedOrderEntry(lookupItem(x)||x)))warnings.push('Your order includes an item blocked by the local safety filter.');
+ if(pocket.some(x=>disallowedOrderEntry(x)))warnings.push('Your order includes an item blocked by the local safety filter.');
  const remaining=40-pocket.length;const filler=fillMode==='nmt'?'Nook Miles Tickets':fillMode==='crowns'?'Royal Crowns':fillMode==='bells'?'99,000 Bells':'None (bot default)';
  $('reviewStats').innerHTML='<div><span>Selected slots</span><strong>'+pocket.length+'/40</strong></div><div><span>Extra filler slots</span><strong>'+(fillMode==='default'?0:remaining)+'</strong></div><div><span>Filler choice</span><strong>'+esc(filler)+'</strong></div><div><span>Total codes</span><strong>'+(codes?codes.length:0)+'</strong></div><div><span>Villager</span><strong>'+esc(chosenVillager?.name||'None')+'</strong></div>';
  const counts=new Map();pocket.forEach(x=>{const key=[x.name,x.variation||'',x.pattern||'',codeFor(x)].join('||');if(!counts.has(key))counts.set(key,{x,count:0});counts.get(key).count++});
@@ -134,7 +134,19 @@ function openOrderReview(){
  $('reviewWarnings').innerHTML=warnings.length?warnings.map(x=>'<p>⚠️ '+esc(x)+'</p>').join(''):'<p>✓ Order format check passed. Review names, variations, and quantities before copying.</p>';
  $('confirmCopy').disabled=!!warnings.length;$('reviewCopyMsg').textContent='';$('reviewModal').hidden=false;document.body.style.overflow='hidden';
 }
-$('copy').onclick=openOrderReview;
+$('copy').onclick=async()=>{
+ const txt=cmd();
+ if(!pocket.length){$('copyMsg').textContent='Add at least one item before copying.';return;}
+ if(!txt||!makeCodes()){$('copyMsg').textContent='This order contains an unsupported or blocked code. Remove that item before copying.';return;}
+ try{
+  await navigator.clipboard.writeText(txt);
+  $('copyMsg').textContent='Copied! Paste your $order command into the WishPort Discord channel.';
+ }catch(e){
+  $('command').value=txt;
+  $('command').focus();$('command').select();
+  $('copyMsg').textContent='Safari could not copy automatically. Tap and hold the selected command above, then choose Copy.';
+ }
+};
 $('backToOrder').onclick=()=>{$('reviewModal').hidden=true;document.body.style.overflow='';};
 $('confirmCopy').onclick=async()=>{const txt=cmd();if(!txt||!makeCodes()||!pocket.length){$('reviewCopyMsg').textContent='Order failed validation. Return to the cart.';return}try{await navigator.clipboard.writeText(txt);$('reviewCopyMsg').textContent='Copied! Paste into the WishPort Discord order channel.';$('copyMsg').textContent='Order copied after review.'}catch(e){$('reviewCopyMsg').textContent='Copy was blocked by Safari. Return to cart and select the command text manually.';$('backToOrder').click();$('command').focus();$('command').select();}};
 
