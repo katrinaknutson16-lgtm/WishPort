@@ -57,3 +57,38 @@
 .stackStepper output{min-width:26px;text-align:center;font-size:18px;font-weight:800;color:#382451}
 .stackStepper small{font-size:12px;color:#685981;white-space:normal}
 #modalStackCount{display:block;width:100%;padding:10px;border:1px solid #d2c3e4;border-radius:10px;font-size:16px;margin-top:6px}
+
+/* WishPort mobile-first full-page order + Materials section */
+.cartPage[hidden],main[hidden],.dock[hidden]{display:none!important}
+.cartPage{min-height:100vh;background:#f7f3fc;padding:12px 15px 110px}
+.cartPageInner{max-width:790px;margin:0 auto}
+.cartPageHead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0 16px}
+.cartPageHead h2{font-size:24px;margin:0;color:#3a2855}
+.cartOverview{display:flex;gap:13px;flex-wrap:wrap;margin:8px 0 15px;color:#533b75}
+.cartOverview strong{background:#fff;padding:12px 15px;border:1px solid #e4daf0;border-radius:12px}
+.cartLinkRow{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 24px}
+.cartLinkRow button{flex:1;min-width:160px;min-height:48px}
+.cartSectionTitle{color:#8058b0;font-size:20px;margin:22px 0 12px}
+.requestedCards{display:grid;gap:13px}
+.requestedCard{border:1px solid #dfd4ef;border-radius:21px;background:white;padding:15px;box-shadow:0 3px 10px #3d205009}
+.requestedTop{display:flex;align-items:center;gap:14px}
+.requestedPicture{width:95px;height:95px;flex:0 0 95px;background:#f7f3fb;display:grid;place-items:center;border-radius:15px;overflow:hidden;color:#88789f;font-size:12px;text-align:center}
+.requestedPicture img{width:100%;height:100%;object-fit:contain}
+.requestedDetails{min-width:0;overflow-wrap:anywhere}
+.requestedDetails h4{font-size:18px;margin:0 0 6px;color:#3a2b50}
+.requestedDetails p{font-size:13px;color:#8b789b;margin:0 0 4px;font-family:monospace}
+.requestedDetails small{display:block;font-size:12px;color:#756987;margin:4px 0}
+.requestedControls{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-top:12px}
+.quantityStepper{display:flex;align-items:center;gap:16px;border:1px solid #dcd0eb;border-radius:13px;padding:5px;background:#faf7fe}
+.quantityStepper button{background:#7452a0;border:0;color:white;width:42px;height:42px;border-radius:10px;font-weight:800;font-size:24px}
+.quantityStepper output{font-size:18px;font-weight:800;min-width:22px;text-align:center}
+.compactSlots{border:1px solid #ded3eb;background:white;padding:12px;border-radius:13px;margin:18px 0}
+.compactSlots summary{cursor:pointer;color:#644a84;font-weight:700}
+.cartPage .cartVillager{background:#fff;border:1px solid #e5dcee;padding:17px}
+.cartPage .fillOptions{margin-top:26px}
+.cartPage .code{min-height:128px;font-family:ui-monospace,Menlo,monospace;line-height:1.6;overflow-wrap:anywhere}
+.materialsFeature{background:#fff;border:2px solid #c8b1e5;border-radius:17px;padding:17px;display:flex;gap:12px;align-items:center;justify-content:space-between;margin:6px 0 17px;flex-wrap:wrap}
+.materialsFeature strong{font-size:20px;color:#463062}
+.materialsFeature p{margin:8px 0 0;color:#776488;font-size:13px;line-height:1.4}
+.materialsFeature button{min-height:45px}
+@media(max-width:430px){.cartOverview strong{font-size:13px}.requestedPicture{width:82px;height:82px;flex-basis:82px}.requestedDetails h4{font-size:16px}}
