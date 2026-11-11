@@ -153,6 +153,23 @@ function openOrderReview(){
  $('reviewWarnings').innerHTML=warnings.length?warnings.map(x=>'<p>⚠️ '+esc(x)+'</p>').join(''):'<p>✓ Order format check passed. Review names, variations, and quantities before copying.</p>';
  $('confirmCopy').disabled=!!warnings.length;$('reviewCopyMsg').textContent='';$('reviewModal').hidden=false;document.body.style.overflow='hidden';
 }
+// Accessible, temporary feedback shown only after a successful clipboard write.
+let wishportCopyNoticeTimer;
+function showOrderCopiedNotice(){
+ let notice=document.getElementById('wishportCopiedNotice');
+ if(!notice){
+  notice=document.createElement('div');
+  notice.id='wishportCopiedNotice';
+  notice.setAttribute('role','status');
+  notice.setAttribute('aria-live','polite');
+  notice.style.cssText='position:fixed;bottom:calc(104px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(90vw,450px);box-sizing:border-box;padding:16px 18px;border:1px solid #b99bde;border-radius:18px;background:#34254c;color:#fff;box-shadow:0 12px 34px #150c2699;font:600 15px/1.45 system-ui,-apple-system,sans-serif;text-align:center;z-index:2147483000;pointer-events:none';
+  document.body.appendChild(notice);
+ }
+ notice.textContent='💜 Order copied! Paste your command into the designated WishPort Discord order channel to join the queue.';
+ notice.hidden=false;
+ clearTimeout(wishportCopyNoticeTimer);
+ wishportCopyNoticeTimer=setTimeout(()=>{notice.hidden=true;},4500);
+}
 $('copy').onclick=async()=>{
  const txt=cmd();
  if(!pocket.length){$('copyMsg').textContent='Add at least one item before copying.';return;}
@@ -160,6 +177,7 @@ $('copy').onclick=async()=>{
  try{
   await navigator.clipboard.writeText(txt);
   $('copyMsg').textContent='Copied! Paste your $order command into the WishPort Discord channel.';
+  showOrderCopiedNotice();
  }catch(e){
   $('command').value=txt;
   $('command').focus();$('command').select();
