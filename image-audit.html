@@ -29,6 +29,7 @@
  function choices(){return all.filter(x=>$('scope').value==='all'||($('scope').value==='3'?x.version3:!x.version3))}
  function updateCount(){const selected=choices();$('total').textContent=selected.length.toLocaleString()+' unique image files across '+rows.length.toLocaleString()+' catalog records';}
  $('scope').onchange=updateCount;updateCount();$('start').disabled=false;
+ if(!all.length){$('total').textContent='Catalog not loaded. Please check that catalog-data.js is in the main WishPort folder.';$('start').disabled=true;}
  function imageLoad(url){return new Promise(resolve=>{
   const im=new Image();let done=false;const timer=setTimeout(()=>finish(false),11000);
   const finish=ok=>{if(done)return;done=true;clearTimeout(timer);im.onload=im.onerror=null;resolve(ok)};
@@ -47,10 +48,9 @@
   const list=choices();$('start').disabled=true;$('stop').disabled=false;$('csv').disabled=true;
   $('results').textContent='Scanning…';$('progress').max=list.length||1;$('progress').value=0;
   function update(){ $('progress').value=attempted;$('counts').textContent=`Checked ${attempted.toLocaleString()} / ${list.length.toLocaleString()} unique URLs · ${success.toLocaleString()} loaded · ${failed.toLocaleString()} failed`;
-   $('results').textContent=allFailures.length?allFailures.slice(-90).map(x=>x.items.map(i=>i.name+' ('+i.variation+')').join(', ')+'
-'+x.url).join('
-
-'):'No permanently broken links discovered so far.';
+   $('results').textContent=allFailures.length
+    ? allFailures.slice(-90).map(x=>x.items.map(i=>i.name+' ('+i.variation+')').join(', ')+'\n'+x.url).join('\n\n')
+    : 'No permanently broken links discovered so far.';
   }
   async function worker(){while(!stop){const idx=pointer++;if(idx>=list.length)return;const row=list[idx];const checkResult=await check(row);attempted++;if(checkResult.ok)success++;else{failed++;allFailures.push(row);}if(attempted%12===0||attempted===list.length)update();}}
   await Promise.all(Array.from({length:8},worker));active=false;$('start').disabled=false;$('stop').disabled=true;$('csv').disabled=false;update();
