@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WishPort Image Audit</title>
+<style>body{font:16px system-ui,-apple-system,sans-serif;background:#1f1b28;color:#f0e6ff;margin:0;padding:22px;max-width:780px;margin-inline:auto}h1{font-size:1.65rem}.panel{background:#30283e;border:1px solid #6e5689;border-radius:16px;padding:18px;margin:14px 0}button,select{font:inherit;padding:12px 16px;border:0;border-radius:10px;background:#b59add;color:#21182d;margin:5px}button:disabled{opacity:.45}button.secondary{background:#494052;color:white}label{display:block;margin:8px 0}progress{width:100%;height:20px}.muted{color:#c3b3d0}#results{max-height:340px;overflow:auto;white-space:pre-wrap;font:12px ui-monospace,monospace;background:#17141e;padding:12px;border-radius:12px}a{color:#d9b7ff}strong{color:#fff}</style>
+</head><body>
+<h1>🔎 WishPort picture audit</h1>
+<p>This checks whether actual image links load on your device. It <strong>does not</strong> verify that the artwork matches the named item or that an item is safe to order.</p>
+<div class="panel"><label>Images to check: <select id="scope"><option value="all">All catalog pictures (large scan)</option><option value="3">3.0 update pictures only</option><option value="non3">Earlier-version pictures only</option></select></label>
+<p id="total">Preparing catalog…</p>
+<button id="start" disabled>Start audit</button><button id="stop" class="secondary" disabled>Stop</button><button id="csv" class="secondary" disabled>Download CSV results</button>
+<p class="muted">The complete scan checks roughly 26,000 images and can consume substantial mobile data. Keep this page open during the scan. If the website is slow, run the 3.0 set separately first.</p>
+<progress id="progress" max="1" value="0"></progress><p id="counts">Not started</p></div>
+<div class="panel"><h2>Failures (after both sources)</h2><div id="results">No scan results yet.</div></div>
+<p><a href="./">Return to WishPort</a></p>
+<script src="catalog-data.js"></script><script src="catalog-expansion.js"></script>
+<script>
+(()=>{
+ const $=id=>document.getElementById(id);
+ const legacy='https://acnhcdn.com/latest/',mirror='https://nh-cdn.catalogue.ac/';
+ const originals=window.WISHPORT_ITEMS||[], rows=[], results=[];
+ for(const x of originals){
+  const map=new Map();if(x.image)map.set(x.image,'default');
+  for(const [label,url] of Object.entries(x.images||{}))if(url)map.set(url,label);
+  for(const [url,label] of map)rows.push({name:x.name,variation:label,category:x.category,version:x.version||'',url});
+ }
+ // One network test per unique URL but retain every item/variation association.
+ const groups=new Map();for(const r of rows){if(!groups.has(r.url))groups.set(r.url,[]);groups.get(r.url).push(r)}
+ const all=[...groups.entries()].map(([url,items])=>({url,items,version3:items.some(x=>x.version.startsWith('3.'))}));
+ let active=false,stop=false,allFailures=[],attempted=0,success=0,failed=0;
+ function choices(){return all.filter(x=>$('scope').value==='all'||($('scope').value==='3'?x.version3:!x.version3))}
+ function updateCount(){const selected=choices();$('total').textContent=selected.length.toLocaleString()+' unique image files across '+rows.length.toLocaleString()+' catalog records';}
+ $('scope').onchange=updateCount;updateCount();$('start').disabled=false;
+ function imageLoad(url){return new Promise(resolve=>{
+  const im=new Image();let done=false;const timer=setTimeout(()=>finish(false),11000);
+  const finish=ok=>{if(done)return;done=true;clearTimeout(timer);im.onload=im.onerror=null;resolve(ok)};
+  im.onload=()=>finish(true);im.onerror=()=>finish(false);im.src=url;
+ })}
+ async function check(entry){const u=entry.url;
+  const preferred=entry.version3&&u.startsWith(legacy)?u.replace(legacy,mirror):u;
+  let ok=await imageLoad(preferred),used=preferred;
+  if(!ok){const alternate=preferred.startsWith(mirror)?u:preferred.startsWith(legacy)?preferred.replace(legacy,mirror):'';
+   if(alternate&&alternate!==preferred){ok=await imageLoad(alternate);if(ok)used=alternate;}
+  }
+  return {ok,used};
+ }
+ $('start').onclick=async()=>{
+  if(active)return;active=true;stop=false;attempted=success=failed=0;allFailures=[];let pointer=0;
+  const list=choices();$('start').disabled=true;$('stop').disabled=false;$('csv').disabled=true;
+  $('results').textContent='Scanning…';$('progress').max=list.length||1;$('progress').value=0;
+  function update(){ $('progress').value=attempted;$('counts').textContent=`Checked ${attempted.toLocaleString()} / ${list.length.toLocaleString()} unique URLs · ${success.toLocaleString()} loaded · ${failed.toLocaleString()} failed`;
+   $('results').textContent=allFailures.length?allFailures.slice(-90).map(x=>x.items.map(i=>i.name+' ('+i.variation+')').join(', ')+'
+'+x.url).join('
+
+'):'No permanently broken links discovered so far.';
+  }
+  async function worker(){while(!stop){const idx=pointer++;if(idx>=list.length)return;const row=list[idx];const checkResult=await check(row);attempted++;if(checkResult.ok)success++;else{failed++;allFailures.push(row);}if(attempted%12===0||attempted===list.length)update();}}
+  await Promise.all(Array.from({length:8},worker));active=false;$('start').disabled=false;$('stop').disabled=true;$('csv').disabled=false;update();
+  $('counts').textContent+=(stop?' · Stopped early':' · Finished');
+ };
+ $('stop').onclick=()=>{stop=true;$('stop').disabled=true};
+ const q=v=>'"'+String(v==null?'':v).replaceAll('"','""')+'"';
+ $('csv').onclick=()=>{const lines=['item,variation,category,version,image_url'];for(const g of allFailures)for(const i of g.items)lines.push([i.name,i.variation,i.category,i.version,g.url].map(q).join(','));
+  const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wishport-broken-image-links.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+ };
+})();
+</script></body></html>

@@ -33,6 +33,9 @@ for(const item of items){
  if(item.image)v3ImageURLs.add(item.image);
  if(item.images)for(const u of Object.values(item.images))if(u)v3ImageURLs.add(u);
 }
+// New images remain matched to their precise item and color variation.
+// The updated mirror is preferred for 3.0; all other images use it only if
+// the regular CDN fails. A failed second source shows an honest placeholder.
 const imageURL=u=>{
  if(!u)return '';
  return v3ImageURLs.has(u)&&u.startsWith(legacyImagePrefix)
@@ -154,7 +157,7 @@ $('collectionsGrid').onclick=e=>{
  selectedCollection=collections[+b.dataset.collection];
  $('collectionTitle').textContent=selectedCollection.name;
  $('collectionDescription').textContent='Original ACNH room photo · original provided order codes';
- $('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div class="presetItem"><span>${i+1}.</span>${x.image?`<img src="${esc(x.image)}" alt="" loading="lazy">`:''}<span>${esc(x.name)}</span><code>${esc(x.hex)}</code></div>`).join('');
+ $('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div class="presetItem"><span>${i+1}.</span>${x.image?`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="" loading="lazy">`:''}<span>${esc(x.name)}</span><code>${esc(x.hex)}</code></div>`).join('');
  $('addCollection').textContent='Add collection';show('collectionModal');
 };
 $('collectionSearch').oninput=renderCollections;
