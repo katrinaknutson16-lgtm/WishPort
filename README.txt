@@ -1,1 +1,7 @@
-WishPort UX update: upload ONLY index.html and style.css to repository root. Replaces welcome introduction with concise text, adds collapsible How to Order guide, and makes database filters collapsible (closed on load). Does not change app.js, catalog data, 12 room photos or collection presets. Existing item orders remain subject to bot validation.
+WishPort: Filters visible by default
+
+Upload index.html to the root of your WishPort GitHub repository, replacing the existing index.html. Do not upload README.txt.
+
+This update adds the open attribute to the Refine your search panel, so Category, Theme, Series, Interaction Type, and Color filters are visible when opening the page. More search options remains optional.
+
+Based on the most recent WishPort Collection Code and Direct Copy version. No catalog, preset, or bot code was modified.
