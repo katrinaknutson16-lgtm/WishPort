@@ -13,3 +13,9 @@ The website currently uses category symbols, not item photos. Color/pattern choi
 Catalog attribution: ACNH community data spreadsheet: https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4
 
 UPDATE: Added mobile browse tabs (Database, Collections, Categories) and nine curated catalog-backed collections. The collections are themed suggestions, not recreations of Nook Islands room photographs.
+
+IMAGE ACCURACY UPDATE
+The catalog intentionally shows “Image not available” instead of generic or incorrect ACNH item illustrations. The categories and collection tiles are decorative labels, not item photographs. True item/variation images require a verified image source and accurate matching.
+
+
+IMAGE SOURCE: Exact per-row image URLs were extracted from IMAGE formulas in the community ACNH spreadsheet. Images load from ACNH CDN with the spreadsheet host as fallback; internet required for images. Not all images are confirmed live. Nintendo owns game image assets. Attribution: https://nookipedia.com/wiki/Community:ACNH_Spreadsheet
