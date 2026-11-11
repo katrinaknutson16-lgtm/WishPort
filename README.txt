@@ -1,9 +1,15 @@
-WISHPORT — FILL REMAINING SLOTS UPDATE — November 10, 2026
+WishPort - Orderable Catalog Filter
 
-Tap Add Item once to add a catalog item directly. In the 40-slot pocket, choose Default Bot Behavior, Nook Miles Tickets (0EF8), Royal Crowns (14BB), or 99,000 Bells (08A4). The selected option fills only the remaining slots in the GENERATED $order command. The items you selected remain unchanged. If all 40 slots are filled, no filler codes are added.
+This package updates the original WishPort website. Upload all six files to the MAIN directory of the existing GitHub repository, replacing the old files.
 
-Example: 4 selected item codes + 36 Nook Miles Ticket codes = 40 codes. Default behavior leaves the command with the 4 selected item codes. A preview explains the selected fill behavior.
+Catalog rows in source: 7,802
+Candidate orderable items retained: 6,835
+Excluded: 967
 
-Upload all six files from this ZIP to the root of your existing GitHub WishPort repository. Replace the old files, commit, and refresh the website.
+Excluded groups: Construction (building exteriors/doors/bridges), Interior Structures (HHP building components), Plants (planted growth and dug-up plants), Fish, Insects, Sea Creatures. Also excluded named house-move/build kits, permits, progression unlocks, quest objects, dream-only tools, and items with no 4-character item code. Other transferable items, such as fences and DIY recipe cards, remain.
 
-Note: Image availability and exact color-variation encoding are separate issues still requiring verification. Test actual command compatibility with your SysBot before sharing widely.
+IMPORTANT: Candidate status is a conservative filter, NOT validation that every item is supported by a given SysBot build. Some items with valid internal IDs may still be non-transferable. For exact color variants, plain four-digit codes may not encode customization details.
+
+If previously saved pocket items were removed by the new filter, they are automatically cleaned out on page load. WishPort's filler and villager sections remain.
+
+Source data: ACNH community data spreadsheet.
