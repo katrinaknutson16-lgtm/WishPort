@@ -1,7 +1,11 @@
-WishPort: Filters visible by default
+WishPort final polish (2026-11-11)
 
-Upload index.html to the root of your WishPort GitHub repository, replacing the existing index.html. Do not upload README.txt.
+Upload ONLY index.html and app.js to the root of your GitHub WishPort repository. Replace the existing files and commit. Do not upload this README.
 
-This update adds the open attribute to the Refine your search panel, so Category, Theme, Series, Interaction Type, and Color filters are visible when opening the page. More search options remains optional.
+Changes:
+- Bottom bar says View Order (existing direct Copy order command stays on cart)
+- Condensed technical explanations on main pages; full safety info in Help & FAQ
+- Collection rejection identifies specific item slot, name, code and reason
+- Direct copy/cart error identifies specific item where possible
 
-Based on the most recent WishPort Collection Code and Direct Copy version. No catalog, preset, or bot code was modified.
+Safety validation rules and codes, catalog data, collection presets, images, CSS, saved orders, and villager features are unchanged.
