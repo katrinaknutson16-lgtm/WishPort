@@ -1,3 +1,12 @@
+WISHPORT - QUICK ADD + HEX CODES - November 10 2026
+
+Change: Tapping + Add item puts the default item directly in your pocket. Use the separate Options button to choose variants.
+Change: The order text is formatted $order with 4-digit hexadecimal codes (not item names).
+Note: Empty-slot fill options include Default, Royal Crowns (14BB), and 99,000 Bells (08A4). Test with your running bot.
+Note: This release does not guarantee pictures or precise customized item variants.
+
+HOW TO UPDATE: replace all six files in your GitHub repository ROOT (not a folder), then check that the page displays "Quick Add + Code Orders · updated Nov 10". A cache-busting query string is included in the HTML.
+
 WISHPORT — CODE ORDER BUILDER UPDATE
 
 Built from the uploaded ACNH community spreadsheet; item Internal ID values converted from decimal to four-digit uppercase hexadecimal codes.
