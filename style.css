@@ -220,3 +220,49 @@
 
 /* Compact, full-width three-tab navigation */
 .browseTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:5px}.browseTabs .browseTab{font-size:clamp(13px,3.5vw,17px);padding:11px 3px;min-height:47px;line-height:1.2}
+
+
+/* WishPort final five improvements: accessible support, compact cart and floating jump. */
+.wpSupport{max-width:100%;margin:12px 0 16px;border:1px solid #765a966b;border-radius:17px;background:#a58bb312;color:inherit;overflow:hidden}
+.wpSupport>summary{list-style:none;cursor:pointer;padding:15px 16px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-weight:800;min-height:48px}
+.wpSupport>summary::-webkit-details-marker{display:none}
+.wpSupport>summary:after{content:'+';font-size:24px;margin-left:auto;line-height:1}
+.wpSupport[open]>summary:after{content:'−'}
+.wpSupportHint{font-weight:450;opacity:.75;font-size:12px}
+.wpSupportBody{border-top:1px solid #9d82b74d;padding:15px;line-height:1.5}
+.wpSupportBody h2{font-size:19px;margin:0 0 12px}
+.wpFaqList{display:grid;gap:8px}
+.wpFaqList details{border:1px solid #9e85b75e;border-radius:12px;padding:0 12px;background:#a58bb30d}
+.wpFaqList summary{cursor:pointer;font-weight:700;padding:12px 0;min-height:45px}
+.wpFaqList p{font-size:14px;margin:2px 0 14px;line-height:1.55}
+.wpReport{margin-top:22px;border-top:1px solid #9e85b75e;padding-top:16px}
+.wpReport h3{font-size:19px;margin:0 0 5px}.wpReport>p{font-size:14px;line-height:1.6;margin:5px 0 14px}
+#wpReportForm{display:grid;gap:12px}
+#wpReportForm label{display:grid;gap:5px;font-weight:700;font-size:13px}
+#wpReportForm input,#wpReportForm select,#wpReportForm textarea{display:block;width:100%;border:1px solid #9c85b88c;background:#241d2b;color:inherit;border-radius:10px;padding:11px;font:inherit;font-size:16px;min-height:44px}
+#wpReportForm textarea{min-height:96px;resize:vertical}
+.wpReportButtons{display:flex;flex-wrap:wrap;gap:10px}.wpReportButtons button{min-height:44px;flex:1 1 180px}
+#wpReportStatus{min-height:20px;font-size:13px;font-weight:600;margin:1px 0 0}
+.wpFirstTip[hidden],.wpBackTop[hidden]{display:none!important}
+.wpFirstTip{margin:10px 0 14px;border:1px solid #a78fc3;border-radius:14px;background:#8b68aa16;color:inherit;display:flex;align-items:flex-start;gap:12px;padding:13px 14px}
+.wpFirstTip div{flex:1;min-width:0}.wpFirstTip strong{font-size:15px}.wpFirstTip p{font-size:13px;line-height:1.55;margin:3px 0 0}
+.wpFirstTip button{border:1px solid #9275ac;border-radius:10px;background:#b59bd7;color:#271833;font-size:13px;font-weight:800;min-height:44px;padding:8px 12px;flex:none}
+.wpCartHelp{display:block;margin:15px 0 4px;min-height:45px;text-align:center;width:100%;font-size:14px}
+.wpBackTop{position:fixed;right:13px;bottom:calc(108px + env(safe-area-inset-bottom));z-index:100;min-width:58px;min-height:48px;padding:7px 12px;border:1px solid #c2a5eb;border-radius:24px;color:#221331;background:#bca1e6;box-shadow:0 5px 18px #170c3380;font-size:20px;font-weight:850;display:flex;align-items:center;gap:5px;justify-content:center}
+.wpBackTop span{font-size:13px}
+body:has(.cartPage:not([hidden])) .wpBackTop{bottom:calc(22px + env(safe-area-inset-bottom))}
+/* Compact cart cards keep every control at least 44px high for touch devices. */
+.cartPage .requestedCards{gap:9px}
+.cartPage .requestedCard{padding:11px 12px;border-radius:15px}
+.cartPage .requestedTop{gap:11px}
+.cartPage .requestedPicture{width:66px;height:66px;flex-basis:66px;border-radius:12px}
+.cartPage .requestedDetails h4{font-size:16px;line-height:1.25;margin-bottom:3px}
+.cartPage .requestedDetails p{font-size:12px;margin:0}
+.cartPage .requestedDetails small{font-size:11px;line-height:1.25;margin:2px 0}
+.cartPage .requestedControls{margin-top:7px;gap:6px;flex-wrap:wrap}
+.cartPage .quantityStepper{gap:10px;padding:2px;border-radius:11px}
+.cartPage .quantityStepper button{height:44px;width:44px;border-radius:9px}
+.cartPage .quantityStepper output{font-size:16px;min-width:18px}
+.cartPage .requestedControls .remove{min-height:44px;padding:8px 11px;font-size:13px}
+@media(max-width:380px){.wpSupportHint{width:100%}.wpFirstTip{flex-wrap:wrap}.wpFirstTip button{margin-left:auto}.wpBackTop{right:9px}.cartPage .requestedCard{padding:9px}.cartPage .requestedControls .remove{font-size:12px;padding:7px 9px}}
+@media(prefers-reduced-motion:reduce){.wpBackTop{scroll-behavior:auto}}
