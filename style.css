@@ -134,3 +134,22 @@
 @media(min-width:620px){.collectionCover{height:270px}}
 
 .variationCaption{font-size:.87rem;font-weight:750;color:#ad86dd;margin:.12rem 0 .4rem}.expandedInfo{font-size:.9rem;color:var(--muted,#aa9ac2);line-height:1.5;margin:10px 2px}.item button[disabled]{opacity:.6;cursor:not-allowed}
+
+/* Scene covers: source images are the exact linked items from each collection. */
+.collectionScene{height:270px;display:block;background:var(--collection-bg,#d7c8df);border-radius:0;overflow:hidden;isolation:isolate}
+.collectionScene::before{display:none}
+.sceneWall{position:absolute;inset:0 0 30% 0;background:linear-gradient(145deg,#ffffff96,#ffffff04 48%,#16122814);z-index:0}
+.sceneWall::before,.sceneWall::after{content:"";position:absolute;width:2px;height:80%;background:#ffffff35;top:10%;left:24%;transform:rotate(-6deg)}
+.sceneWall::after{left:79%;transform:rotate(6deg)}
+.sceneFloor{position:absolute;inset:66% -8% -25%;background:linear-gradient(180deg,#ffffff92,#6a547d3d);border-top:3px solid #ffffffac;transform:perspective(240px) rotateX(28deg);transform-origin:top center;z-index:0}
+.sceneSpotlight{position:absolute;inset:8% 12% 8%;background:radial-gradient(ellipse at 50% 75%,#ffffffad,transparent 70%);z-index:0}
+.collectionScene .sceneObject{position:absolute;object-fit:contain;padding:0;width:36%;height:46%;z-index:2;filter:drop-shadow(0 8px 5px #34243f42);pointer-events:auto}
+.collectionScene .sceneObject1{width:46%;height:60%;left:27%;bottom:17%;z-index:3}
+.collectionScene .sceneObject2{width:33%;height:43%;left:3%;bottom:24%;z-index:2}
+.collectionScene .sceneObject3{width:32%;height:43%;right:3%;bottom:26%;z-index:2}
+.collectionScene .sceneObject4{width:27%;height:33%;left:12%;bottom:12%;z-index:4}
+.collectionScene .sceneObject5{width:25%;height:32%;right:12%;bottom:12%;z-index:4}
+.collectionScene .sceneObject6{width:23%;height:26%;left:35%;bottom:10%;z-index:5}
+.collectionScene .sceneObject7{width:22%;height:29%;right:3%;top:8%;z-index:1;opacity:.93}
+.collectionScene .collectionCoverTag{position:absolute;left:12px;bottom:10px;z-index:6;background:#fffef2e8;color:#48315f;font-size:9px;letter-spacing:.35px;max-width:calc(100% - 24px);line-height:1.3}
+@media(min-width:620px){.collectionScene{height:295px}}

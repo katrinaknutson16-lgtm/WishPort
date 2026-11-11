@@ -119,33 +119,36 @@ const collections=definitions.map((d,index)=>{
  const pack=[...unique.values()].slice(0,40);
  return {...d,items:pack,id:index};
 });
-// One large real catalog image per collection. The image is an illustrative featured
-// ITEM from this collection, not a fabricated screenshot of an entire room.
-// To use a bespoke licensed room cover later, set a verified coverImage URL on
-// a definition; otherwise this uses one item photo from the existing catalog.
-const featuredCoverNames={
- 'Cozy Cottagecore':['garden bench','garden lantern','log bench'],
- 'Starry Night':['crescent-moon chair','nova light','moon'],
- 'Pretty in Pink':['cute sofa','cute bed','dreamy bed'],
- 'Cafe & Bakery':['espresso maker','coffee grinder','cafe-curtain wall'],
- 'Spooky Island':['spooky arch','spooky tower','spooky lantern'],
- 'Dream Bathroom':['claw-foot tub','long bathtub','shower booth'],
- 'Japanese Garden':['bamboo bench','deer scare','stone lion-dog'],
- 'Holiday Lights':['illuminated tree','festive tree','big festive tree'],
- 'Elegant Living Room':['elegant sofa','antique sofa','antique bureau']
+// Mini staged previews are compositions of ACTUAL catalog item images contained in
+// the corresponding 40-item collection. They are not generated room screenshots.
+const sceneFavoriteNames={
+ 'Cozy Cottagecore':['garden bench','garden lantern','log bench','barrel','cypress plant'],
+ 'Starry Night':['crescent-moon chair','nova light','moon','star clock'],
+ 'Pretty in Pink':['cute sofa','cute bed','dreamy bed','heart-shaped bouquet'],
+ 'Cafe & Bakery':['espresso maker','coffee grinder','counter table','dessert case'],
+ 'Spooky Island':['spooky arch','spooky tower','spooky lantern','spooky chair'],
+ 'Dream Bathroom':['claw-foot tub','long bathtub','shower booth','bathroom sink'],
+ 'Japanese Garden':['bamboo bench','deer scare','stone lion-dog','garden lantern'],
+ 'Holiday Lights':['illuminated tree','festive tree','big festive tree','illuminated present'],
+ 'Elegant Living Room':['elegant sofa','antique sofa','antique bureau','elegant lamp']
 };
-function collectionCover(c){
- if(c.coverImage) return {src:c.coverImage,name:c.name};
- const candidates=featuredCoverNames[c.name]||[];
- // Select a real item belonging to this collection, never an unrelated icon.
- let featured=candidates.map(n=>c.items.find(i=>i.name.toLowerCase()===n && i.image)).find(Boolean);
- if(!featured) featured=c.items.find(i=>i.image);
- return featured?{src:featured.image,name:featured.name}:null;
+function stagedItems(collection){
+ const available=collection.items.filter(x=>x.image && /^https:\/\//i.test(x.image));
+ const favorites=sceneFavoriteNames[collection.name]||[];
+ const chosen=[];const used=new Set();
+ const add=x=>{if(x&&!used.has(x.image)){used.add(x.image);chosen.push(x)}};
+ favorites.forEach(name=>add(available.find(x=>x.name.toLowerCase()===name)));
+ // Spread selections across the collection instead of just taking its first items.
+ const step=Math.max(1,Math.floor(available.length/9));
+ for(let i=0;i<available.length && chosen.length<7;i+=step)add(available[i]);
+ available.forEach(x=>{if(chosen.length<7)add(x)});
+ return chosen.slice(0,7);
 }
 function coverMarkup(c){
- const cover=collectionCover(c);
- const alt=cover ? `Actual ACNH item preview: ${cover.name}` : `${c.name} collection`;
- return `<div class="collectionCover" style="--collection-bg:${c.color}">${cover?`<img loading="lazy" decoding="async" src="${esc(cover.src)}" alt="${esc(alt)}" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="collectionCoverFallback" hidden>Preview image unavailable</span>`:'<span class="collectionCoverFallback">Preview image unavailable</span>'}<span class="collectionCoverTag">FEATURED ITEM PREVIEW</span></div>`;
+ const staged=stagedItems(c);
+ const altNames=staged.map(x=>x.name).join(', ');
+ const pieces=staged.map((x,i)=>`<img class="sceneObject sceneObject${i+1}" loading="lazy" decoding="async" src="${esc(x.image)}" alt="${esc(x.name)}" title="Included: ${esc(x.name)}" onerror="this.style.display='none'">`).join('');
+ return `<div class="collectionCover collectionScene" style="--collection-bg:${c.color}" role="img" aria-label="Staged preview made from included ACNH items: ${esc(altNames)}"><div class="sceneWall" aria-hidden="true"></div><div class="sceneFloor" aria-hidden="true"></div><div class="sceneSpotlight" aria-hidden="true"></div>${pieces||'<span class="collectionCoverFallback">No item pictures available</span>'}<span class="collectionCoverTag">${staged.length} INCLUDED ITEMS SHOWN · STYLED PREVIEW</span></div>`;
 }
 function renderCollections(){const q=$('collectionSearch').value.trim().toLowerCase();const shown=collections.filter(x=>x.name.toLowerCase().includes(q)||x.description.toLowerCase().includes(q));$('collectionsGrid').innerHTML=shown.length?shown.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.description)}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div></div></article>`).join(''):'<div class="empty">No collections match that search.</div>';}
 let selectedCollection=null;
