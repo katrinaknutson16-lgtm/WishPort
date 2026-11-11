@@ -202,3 +202,21 @@
 .wpFilterHint span{display:none}
 .wpFilterDisclosure .explorerFilterPanel{margin:0;border:0;border-top:1px solid #9979ba55;box-shadow:none;border-radius:0;background:transparent}
 @media(max-width:420px){.wpFilterDisclosure>summary{padding:13px 12px}.wpFilterHint{width:100%;order:3}}
+
+/* Final order quality-of-life tools */
+.orderToolbox,.pickupSteps{background:white;border:1px solid #ddd0ec;border-radius:17px;padding:16px;margin:20px 0;box-shadow:0 2px 9px #4026520c}
+.orderToolbox h3{margin:0 0 7px;color:#4a2b6c}.saveOrderRow{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.saveOrderRow input,.saveOrderRow select{flex:1 1 170px;min-width:130px;min-height:45px;padding:10px;border:1px solid #d6c4e8;border-radius:11px;background:#fff;color:#35254d;font-size:15px}
+.saveOrderRow button{min-height:44px}.dangerOutline{border:1px solid #b66c82!important;color:#963e60!important;background:#fff7fa!important}
+.pickupSteps summary{font-weight:800;color:#523276;cursor:pointer;font-size:16px}.pickupSteps li{padding:3px 0;line-height:1.5}.pickupSteps ol{padding-left:22px}.pickupSteps p{font-size:13px;color:#765c8a}
+.reviewOverlay[hidden]{display:none!important}.reviewOverlay{position:fixed;inset:0;z-index:5000;background:#261a35b8;display:flex;align-items:center;justify-content:center;padding:13px}
+.reviewCard{background:#faf7fe;color:#33224e;border-radius:23px;padding:20px;max-width:580px;width:100%;max-height:92vh;overflow:auto;box-shadow:0 18px 80px #160d2970}
+.reviewCard h2{font-size:22px;margin:0 0 8px}.reviewStats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.reviewStats>div{background:white;border:1px solid #e7ddef;border-radius:11px;padding:10px;display:flex;flex-direction:column;gap:4px}.reviewStats span{font-size:12px;color:#6c617a}.reviewStats strong{font-size:14px;overflow-wrap:anywhere}
+.reviewItemList{max-height:210px;overflow:auto;border:1px solid #e5d9ee;border-radius:12px;background:white}
+.reviewItemList>div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #ede6f2;padding:10px;font-size:13px}.reviewItemList span{text-align:right;overflow-wrap:anywhere;color:#6b5581}
+.reviewWarnings{margin:14px 0;font-size:13px}.reviewWarnings p{background:#f3eafb;padding:10px;border-radius:9px;margin:5px 0}.reviewActions{display:flex;gap:10px;flex-wrap:wrap}.reviewActions button{flex:1;min-height:48px}
+@media(max-width:430px){.saveOrderRow button{flex:1}.reviewStats{grid-template-columns:repeat(2,minmax(0,1fr))}.reviewCard{padding:15px}.reviewActions button{flex:1 1 100%}}
+
+/* Compact, full-width three-tab navigation */
+.browseTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:5px}.browseTabs .browseTab{font-size:clamp(13px,3.5vw,17px);padding:11px 3px;min-height:47px;line-height:1.2}

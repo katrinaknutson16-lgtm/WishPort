@@ -1,0 +1,9 @@
+WishPort Final UX Update — November 11, 2026
+
+For your existing GitHub Pages WishPort repository, upload these three files to the MAIN directory and replace the existing versions: index.html, style.css, app.js.
+
+Do NOT overwrite catalog-data.js, catalog-expansion.js, collection-presets.js, villagers-data.js or the collection-covers folder.
+
+This update adds a required review step before copying the order, named saved orders (stored on the same browser/device), a full clear action with confirmation, and Dodo pickup steps. The included COLLECTION_VERIFICATION.csv is for reference only and does not need uploading.
+
+Important: checking the hexadecimal code format is not the same as confirming an item is safe for your SysBot version. Keep RequireValidInventoryMetadata enabled.
