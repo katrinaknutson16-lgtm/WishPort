@@ -6,7 +6,7 @@
 
 
 /* Easy-to-tap mobile browse modes */
-.browseTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:8px 0 18px;padding:5px;background:#eae1f7;border-radius:17px;position:sticky;top:0;z-index:3;box-shadow:0 4px 14px #2d174516}
+.browseTabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:8px 0 18px;padding:5px;background:#eae1f7;border-radius:17px;position:sticky;top:0;z-index:3;box-shadow:0 4px 14px #2d174516}
 .browseTab{border:0;background:transparent;border-radius:12px;padding:14px 5px;font-size:clamp(11px,2.9vw,15px);font-weight:750;color:#5d477b;min-height:51px}
 .browseTab.active{background:#6c4c9b;color:#fff;box-shadow:0 2px 8px #35135226}
 .browsePanel[hidden]{display:none!important}.sectionIntro{padding:3px 3px 13px}.sectionIntro h2{font-size:23px;margin:5px 0;color:#46335e}.sectionIntro p{font-size:14px;color:#79698e;line-height:1.5;margin:6px 0 12px}
@@ -27,3 +27,18 @@
 .categorySymbol{font-size:20px;display:grid;place-items:center;width:45px;height:45px;background:#eee6f8;border:1px solid #dfd2ef;border-radius:14px;color:#6c4c9b;font-weight:800}
 
 .art.picture{overflow:hidden;background:#f6f2fa;display:flex;align-items:center;justify-content:center}.art.picture img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:auto}.selectionPicture{height:170px;background:#f8f4fc;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}.selectionPicture img{max-width:100%;max-height:160px;object-fit:contain}
+
+/* Villager browser and selection */
+.browseTabs .browseTab{padding:13px 2px;font-size:clamp(10px,2.65vw,14px);line-height:1.25}
+.villagerGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:12px 0}
+@media(min-width:680px){.villagerGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1000px){.villagerGrid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.villagerCard{border:1px solid #e5dcf1;background:#fff;border-radius:16px;padding:11px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px}
+.villagerPortrait{background:#f3ecfb;border-radius:14px;width:100%;height:110px;display:grid;place-items:center;overflow:hidden}
+.villagerPortrait img{width:100%;height:100%;object-fit:contain}
+.villagerDetails{text-align:center;flex:1}.villagerDetails h3{font-size:15px;margin:1px 0 5px}.villagerDetails p{font-size:11px;color:#776a85;margin:4px 0;line-height:1.4}
+.villagerPick{width:100%;border:0;border-radius:10px;background:#6c4c9b;color:#fff;min-height:38px;font-weight:700;font-size:12px}
+.villagerPick.active{background:#d9caec;color:#553677}
+.selectedVillager{background:#eee6f8;border:1px solid #c8b2e4;border-radius:13px;padding:10px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:13px;margin:12px 0}
+.selectedVillager[hidden]{display:none}.selectedVillager span{overflow-wrap:anywhere}
+.cartVillager{background:#f6f0fc;border-radius:11px;padding:10px;margin:7px 0}.villagerCartRow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px}.villagerCartRow span{font-size:11px;color:#6c548b}
