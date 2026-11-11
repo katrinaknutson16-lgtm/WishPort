@@ -1,7 +1,8 @@
 (()=>{'use strict';const items=window.WISHPORT_ITEMS || [];const DISALLOWED_CODES=new Set(['35DB','10DB','10DC','10DD']);const isDIY=x=>x&&x.category==='Recipes';const orderCode=x=>isDIY(x)?String(x.orderHex||(/^0000[0-9A-F]{4}000016A2$/i.test(String(x.hex||''))?x.hex:'')):String(x.hex||'');const validItemCode=x=>isDIY(x)?/^0000[0-9A-F]{4}000016A2$/i.test(orderCode(x)): /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(orderCode(x));const disallowedOrderEntry=x=>!x||x.variantOrderSafe===false||x.recipeStatus==='blocked'||!validItemCode(x)||DISALLOWED_CODES.has(String(x.hex||'').toUpperCase())||['magic bag','communicator','communicator part'].includes(String(x.name||'').toLowerCase());if(!items.length){document.getElementById('summary').textContent='Catalog data could not load. Check that catalog-data.js is uploaded alongside index.html.';return;}const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));let page=0,filtered=[],chosen=null,pocket=[],fav=new Set();let fillMode='default';try{fillMode=localStorage.getItem('wishport_fill')||'default'}catch(e){}let chosenVillager=null;try{const savedVillager=JSON.parse(localStorage.getItem("wishport_villager")||"null");if(savedVillager&&/^[A-Za-z0-9]{3,12}$/.test(savedVillager.id))chosenVillager=savedVillager;}catch(e){}try{const saved=JSON.parse(localStorage.getItem('wishport_pocket')||'[]');if(Array.isArray(saved))pocket=saved.slice(0,40);}catch(e){}try{fav=new Set(JSON.parse(localStorage.getItem('wishport_favorites')||'[]'));}catch(e){}// Drop cached pocket items that are no longer eligible for the order builder.
 const eligibleKeys=new Set(items.map(x=>x.name+'|'+x.category));
+const presetCodes=new Set((window.WISHPORT_PRESETS||[]).flatMap(p=>p.codes||[]));
 const beforePrune=pocket.length;
-pocket=pocket.filter(x=>!disallowedOrderEntry(x) && (eligibleKeys.has(x.name+'|'+(x.category||'')) || (!x.category && items.some(it=>it.name===x.name)))).slice(0,40);
+pocket=pocket.filter(x=>!disallowedOrderEntry(x) && (presetCodes.has(x.hex) || eligibleKeys.has(x.name+'|'+(x.category||'')) || (!x.category && items.some(it=>it.name===x.name)))).slice(0,40);
 if(pocket.length!==beforePrune){try{localStorage.setItem('wishport_pocket',JSON.stringify(pocket))}catch(e){}}
 const exactMaterials=new Set(['wood','softwood','hardwood','iron nugget','gold nugget','clay','stone','bamboo piece','young spring bamboo','bamboo shoot','tree branch','acorn','pine cone','pearl','vine','glowing moss','star fragment','large star fragment','snowflake','large snowflake','cherry-blossom petal','maple leaf','round mushroom','flat mushroom','skinny mushroom','rare mushroom','elegant mushroom','blue ornament','red ornament','gold ornament','earth egg','leaf egg','sky egg','stone egg','water egg','wood egg','conch','coral','cowrie','giant clam','sand dollar','sea snail','venus comb','summer shell','fish bait','customization kit','rusted part','clump of weeds','green pumpkin','orange pumpkin','white pumpkin','yellow pumpkin','carrot','potato','tomato','sugarcane','wheat','flour','whole-wheat flour','sugar','brown sugar','apple','cherry','peach','pear','orange','coconut','heart crystal','manila clam','aquarius fragment','aries fragment','cancer fragment','capricorn fragment','gemini fragment','leo fragment','libra fragment','pisces fragment','sagittarius fragment','scorpius fragment','taurus fragment','virgo fragment','feather','red feather','blue feather','green feather','purple feather','rainbow feather']);
 const isMaterial=x=>x.category==='Other'&&exactMaterials.has(String(x.name).toLowerCase());
@@ -98,66 +99,49 @@ const catCounts=new Map();items.forEach(x=>catCounts.set(x.category,(catCounts.g
 $('categoryGrid').innerHTML=[...catCounts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([c,n])=>`<button class="categoryTile" data-cat="${esc(c)}"><span class="categorySymbol" aria-hidden="true">${esc(c.slice(0,1).toUpperCase())}</span><span class="categoryLabel">${esc(c)}</span><span class="categoryCount">${n.toLocaleString()} items</span></button>`).join('');
 $('shopMaterials').onclick=()=>{activateTab('database');quick='all';$('search').value='';$('category').value='group:Materials';$('version').value='';page=0;apply();document.querySelector('.browseTabs').scrollIntoView({block:'start'});};
 $('categoryGrid').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;activateTab('database');quick='all';$('pills').querySelectorAll('.pill').forEach((x,i)=>x.classList.toggle('active',i===0));$('search').value='';$('version').value='';$('category').value=b.dataset.cat;page=0;apply();document.querySelector('.browseTabs').scrollIntoView({block:'start',behavior:'smooth'});};
-// Curated, catalog-matched packs. No fabricated item names or external image dependency.
-const definitions=[
- {name:'Cozy Cottagecore',icon:['🏡','🌿','🪵'],color:'linear-gradient(145deg,#e8ebd5,#b5cba6)',description:'Woodsy furniture, plants, and charming garden details.',terms:/wooden|log |cottage|garden|mush|plant|cypress|vine|leaf|hedge|rattan|rustic|picnic|barrel|hay|tree-stump|stump|fence/i},
- {name:'Starry Night',icon:['🌙','⭐','🔮'],color:'linear-gradient(145deg,#c2b8ef,#8294d9)',description:'Dreamy celestial decor, glowing lights, and nighttime magic.',terms:/star|moon|nova|space|astronaut|galax|rocket|satellite|asteroid|meteor|glow|glowing|dreamy|illuminated|light|lamp/i},
- {name:'Pretty in Pink',icon:['🌷','🎀','🩷'],color:'linear-gradient(145deg,#fbd2e5,#e5add0)',description:'Cute furniture, sweet details, and soft room accessories.',terms:/cute |dreamy|heart|lovely|flower|rose|cherry|mom.s|doll|frilly|plush|fancy|sweet|pink/i},
- {name:'Cafe & Bakery',icon:['☕','🥐','🍰'],color:'linear-gradient(145deg,#f3debe,#c9a47c)',description:'Tables, food displays, coffee essentials, and cafe accents.',terms:/cafe|café|coffee|tea |tea-|bak|bread|cake|counter|stool|espresso|sandwich|cookie|cup|dessert|pastr|menu|milk|frapp|cinnamon|kitchen/i},
- {name:'Spooky Island',icon:['🎃','🕯️','🦇'],color:'linear-gradient(145deg,#e8c79a,#b6a3c9)',description:'Halloween-inspired decorations and mysterious seasonal finds.',terms:/spooky|pumpkin|haunt|grave|scare|candl|skull|creepy|goth|jack|magic|witch|western-style stone|throwback|dark/i},
- {name:'Dream Bathroom',icon:['🛁','🪴','🫧'],color:'linear-gradient(145deg,#c6e5f0,#dfd5f3)',description:'Bathroom fixtures, sinks, plants, mats, and clean decor.',terms:/bath|shower|toilet|sink|towel|mirror|wash|laundry|mat |rug|tile|plant|soap|scale|washing|rack/i},
- {name:'Japanese Garden',icon:['🎋','🍃','🏮'],color:'linear-gradient(145deg,#d7ebd2,#a8c4b0)',description:'Bamboo, stone decorations, natural landscaping, and lanterns.',terms:/bamboo|zen |imperial|stone |stone-|moss|bonsai|garden|lantern|pond|pagoda|torii|shoji|tatami|sakura|cherry-blossom|deer scare|rock/i},
- {name:'Holiday Lights',icon:['🎄','🎁','✨'],color:'linear-gradient(145deg,#cce5d9,#f4c8d2)',description:'Festive trees, sparkling seasonal decorations, and toys.',terms:/festive|illuminated|ornament|Toy Day|snow|holiday|gift|sleigh|reindeer|frozen|tree|toy|present|winter|light/i},
- {name:'Elegant Living Room',icon:['🛋️','🪞','🕰️'],color:'linear-gradient(145deg,#efdfed,#cdb8d6)',description:'Sofas, mirrors, lamps, and polished interior furnishings.',terms:/elegant|antique|sofa|chair|table|lamp|mirror|clock|vase|piano|fireplace|chandelier|curtain|cabinet|sideboard|rug/i}
-];
-const blocked=/^\?|^\d+ celebratory/i;
-const permissible=new Set(['Housewares','Miscellaneous','Wall-mounted','Ceiling Decor','Rugs','Wallpaper','Floors','Fencing']);
-const collections=definitions.map((d,index)=>{
- const matched=items.filter(x=>permissible.has(x.category)&&!blocked.test(x.name)&&d.terms.test(x.name));
- const unique=new Map();matched.forEach(x=>{if(!unique.has(x.name.toLowerCase()))unique.set(x.name.toLowerCase(),x)});
- // Every preset uses 40 genuine, distinct catalog entries and remains stable between visits.
- const pack=[...unique.values()].slice(0,40);
- return {...d,items:pack,id:index};
-});
-// Mini staged previews are compositions of ACTUAL catalog item images contained in
-// the corresponding 40-item collection. They are not generated room screenshots.
-const sceneFavoriteNames={
- 'Cozy Cottagecore':['garden bench','garden lantern','log bench','barrel','cypress plant'],
- 'Starry Night':['crescent-moon chair','nova light','moon','star clock'],
- 'Pretty in Pink':['cute sofa','cute bed','dreamy bed','heart-shaped bouquet'],
- 'Cafe & Bakery':['espresso maker','coffee grinder','counter table','dessert case'],
- 'Spooky Island':['spooky arch','spooky tower','spooky lantern','spooky chair'],
- 'Dream Bathroom':['claw-foot tub','long bathtub','shower booth','bathroom sink'],
- 'Japanese Garden':['bamboo bench','deer scare','stone lion-dog','garden lantern'],
- 'Holiday Lights':['illuminated tree','festive tree','big festive tree','illuminated present'],
- 'Elegant Living Room':['elegant sofa','antique sofa','antique bureau','elegant lamp']
-};
-function stagedItems(collection){
- const available=collection.items.filter(x=>x.image && /^https:\/\//i.test(x.image));
- const favorites=sceneFavoriteNames[collection.name]||[];
- const chosen=[];const used=new Set();
- const add=x=>{if(x&&!used.has(x.image)){used.add(x.image);chosen.push(x)}};
- favorites.forEach(name=>add(available.find(x=>x.name.toLowerCase()===name)));
- // Spread selections across the collection instead of just taking its first items.
- const step=Math.max(1,Math.floor(available.length/9));
- for(let i=0;i<available.length && chosen.length<7;i+=step)add(available[i]);
- available.forEach(x=>{if(chosen.length<7)add(x)});
- return chosen.slice(0,7);
+// Exactly twelve curated collections; original 16-character order codes are never recalculated.
+const presetRows=window.WISHPORT_PRESETS||[];
+const catalogByID=new Map();
+for (const it of items){
+ const codes=[it.hex,it.orderHex,...Object.values(it.variantHex||{})];
+ for(const code of codes){if(code && !catalogByID.has(String(code).toUpperCase()))catalogByID.set(String(code).toUpperCase(),it)}
 }
-function coverMarkup(c){
- const staged=stagedItems(c);
- const altNames=staged.map(x=>x.name).join(', ');
- const pieces=staged.map((x,i)=>`<img class="sceneObject sceneObject${i+1}" loading="lazy" decoding="async" src="${esc(x.image)}" alt="${esc(x.name)}" title="Included: ${esc(x.name)}" onerror="this.style.display='none'">`).join('');
- return `<div class="collectionCover collectionScene" style="--collection-bg:${c.color}" role="img" aria-label="Staged preview made from included ACNH items: ${esc(altNames)}"><div class="sceneWall" aria-hidden="true"></div><div class="sceneFloor" aria-hidden="true"></div><div class="sceneSpotlight" aria-hidden="true"></div>${pieces||'<span class="collectionCoverFallback">No item pictures available</span>'}<span class="collectionCoverTag">${staged.length} INCLUDED ITEMS SHOWN · STYLED PREVIEW</span></div>`;
+const collections=presetRows.map((p,id)=>({
+ id,name:p.name,cover:p.cover,description:'Curated ACNH room preset',
+ items:p.codes.map(hex=>{
+  const original=catalogByID.get(hex)||catalogByID.get(hex.slice(-4));
+  return {name:original?.name||'ACNH item #'+hex.slice(-4),category:original?.category||'',image:original?.image||'',hex,variation:original?.variationPreset||'',pattern:original?.patternPreset||''};
+ })
+}));
+function coverMarkup(c){return `<div class="collectionCover realRoomCover"><img src="${esc(c.cover)}" loading="lazy" alt="Actual Animal Crossing New Horizons room preview: ${esc(c.name)}"><span class="roomPreviewBadge">ACTUAL ACNH ROOM</span></div>`;}
+function renderCollections(){
+ const q=$('collectionSearch').value.trim().toLowerCase();
+ const found=collections.filter(x=>x.name.toLowerCase().includes(q));
+ $('collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>Original curated ACNH room collection</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div><button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button></div></article>`).join(''):'<p class="empty">No matching collections.</p>';
 }
-function renderCollections(){const q=$('collectionSearch').value.trim().toLowerCase();const shown=collections.filter(x=>x.name.toLowerCase().includes(q)||x.description.toLowerCase().includes(q));$('collectionsGrid').innerHTML=shown.length?shown.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.description)}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div></div></article>`).join(''):'<div class="empty">No collections match that search.</div>';}
 let selectedCollection=null;
-$('collectionsGrid').onclick=e=>{const b=e.target.closest('[data-collection]');if(!b)return;selectedCollection=collections[+b.dataset.collection];$('collectionTitle').textContent=selectedCollection.name;$('collectionDescription').textContent=selectedCollection.description;$('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div><span>${i+1}.</span>${esc(x.name)}</div>`).join('');$('addCollection').textContent='Add '+selectedCollection.items.length+' items to pocket';show('collectionModal');};
+function addPreset(c){
+ if(!c||!c.items.length||c.items.length>40)return;
+ if(pocket.length&& !confirm('Replace your current pocket with this preset?'))return;
+ // Preserve raw per-slot metadata. Never derive order strings from display names.
+ const unsafe=c.items.filter(x=>disallowedOrderEntry(x));
+ if(unsafe.length){alert('This collection contains '+unsafe.length+' code(s) blocked by WishPort safety checks. No order was added.');return;}
+ pocket=c.items.map(x=>({name:x.name,category:x.category,hex:x.hex,variation:x.variation||'',pattern:x.pattern||''}));
+ savePocket();hide('collectionModal');cart();show('cartModal');
+}
+$('collectionsGrid').onclick=e=>{
+ const add=e.target.closest('[data-add-collection]');if(add){addPreset(collections[+add.dataset.addCollection]);return;}
+ const b=e.target.closest('[data-collection]');if(!b)return;
+ selectedCollection=collections[+b.dataset.collection];
+ $('collectionTitle').textContent=selectedCollection.name;
+ $('collectionDescription').textContent='Original ACNH room photo · original provided order codes';
+ $('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div class="presetItem"><span>${i+1}.</span>${x.image?`<img src="${esc(x.image)}" alt="" loading="lazy">`:''}<span>${esc(x.name)}</span><code>${esc(x.hex)}</code></div>`).join('');
+ $('addCollection').textContent='Add collection';show('collectionModal');
+};
 $('collectionSearch').oninput=renderCollections;
-$('addCollection').onclick=()=>{if(!selectedCollection)return;const remaining=40-pocket.length;if(remaining<selectedCollection.items.length){alert('This collection needs '+selectedCollection.items.length+' empty slots. Your pocket has '+remaining+' available. Clear the pocket or remove some items first.');return;}const unknown=selectedCollection.items.filter(x=>disallowedOrderEntry(lookupItem(x)||x));if(unknown.length){alert('This collection contains items without valid order codes and cannot be added as a complete order.');return;}selectedCollection.items.forEach(x=>pocket.push({name:x.name,category:x.category||'',variation:'',pattern:'',hex:orderCode(lookupItem(x)||x)}));savePocket();$('qty').textContent=pocket.length;hide('collectionModal');cart();show('cartModal');};
+$('addCollection').onclick=()=>addPreset(selectedCollection);
 $('collectionModal').addEventListener('click',e=>{if(e.target===$('collectionModal'))hide('collectionModal')});
 renderCollections();
-
 
 // Dream villager browser: actual ACNH villagers and their internal IDs, not invented names.
 const villagers=window.WISHPORT_VILLAGERS||[];

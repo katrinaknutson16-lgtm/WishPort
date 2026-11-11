@@ -153,3 +153,14 @@
 .collectionScene .sceneObject7{width:22%;height:29%;right:3%;top:8%;z-index:1;opacity:.93}
 .collectionScene .collectionCoverTag{position:absolute;left:12px;bottom:10px;z-index:6;background:#fffef2e8;color:#48315f;font-size:9px;letter-spacing:.35px;max-width:calc(100% - 24px);line-height:1.3}
 @media(min-width:620px){.collectionScene{height:295px}}
+
+/* Original, untouched Animal Crossing room screenshots on curated collection cards. */
+.realRoomCover{height:auto;aspect-ratio:16/10;background:#191522;display:block;position:relative;}
+.realRoomCover::before{display:none!important}
+.realRoomCover img{display:block;width:100%;height:100%;object-fit:contain;padding:0;filter:none;background:#18121d}
+.realRoomCover .roomPreviewBadge{position:absolute;bottom:12px;left:12px;background:#2c1d3dcc;color:#f7eeff;border:1px solid #aa89d2;border-radius:18px;font-size:10px;font-weight:700;padding:6px 10px;letter-spacing:.4px}
+.collectionAddQuick{width:100%;margin-top:12px}
+.presetItem{display:flex!important;align-items:center;gap:9px;flex-wrap:wrap;padding:8px 6px;border-bottom:1px solid #cdb9df45}
+.presetItem img{height:36px;width:36px;object-fit:contain;flex:none}
+.presetItem code{font-size:10px;overflow-wrap:anywhere;color:#967bb4}
+@media(min-width:620px){.realRoomCover{height:auto;aspect-ratio:16/10}}
