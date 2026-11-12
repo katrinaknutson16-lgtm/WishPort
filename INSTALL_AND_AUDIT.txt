@@ -1,0 +1,22 @@
+WISHPORT FILTER METADATA AUDIT FIX
+=================================
+UPLOAD ONLY app.js TO THE ROOT OF YOUR WISHPORT GITHUB REPOSITORY.
+Do not remove catalog-data.js, collection-presets.js, or your cover photos.
+
+Corrections:
+- Zen Modern now finds all five Artful items (Artful bed, chair, lamp, screen, shelves).
+  Animal Crossing renamed Zen Modern to Artful in update 3.0.2; the user-facing option
+  stays Zen Modern to match the requested Pange filter screenshots.
+- Food & Drink theme now includes 35 specifically identified real ACNH food and drink item families.
+- Colour filtering does not fall back to a different color's broad family-level color tags
+  when a variation has no verified color metadata; this prevents inaccurate matches.
+- Audited the five filter option inventories in the metadata: Categories (38), Themes (47),
+  Series (56), Interactions (13), Colours (14). All now have at least one tagged record.
+
+Limits: This is a metadata audit, not a live bot test or a guarantee that every 3.0 item
+has complete tags. It does not change item codes, item safety restrictions, collection
+contents, order builders, or page layout. Select a variation after applying any filter
+and verify the displayed image/color. Original catalog data is untouched.
+
+After upload: Commit changes, refresh the WishPort site (prefer a fresh tab), choose
+Series > zen modern to see Artful furniture, then Theme > food & drink.
