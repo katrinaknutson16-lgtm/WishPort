@@ -115,7 +115,7 @@
 <p class="hint">Villagers are matched to internal character codes from the ACNH spreadsheet. When selected, their code is appended to the <code>$order</code> command. WishPort injects a villager into its first save slot, potentially overwriting the resident already there. Confirm your bot supports the selected villager before processing.</p>
 </section></main><section id="cartModal" class="cartPage" hidden aria-label="WishPort order cart"><div class="cartPageInner"><div class="cartPageHead"><button class="secondary" id="backShopping" type="button">← Back to items</button><h2>POCKET<br>INVENTORY</h2></div>
 <div class="cartOverview"><strong id="cartCount">Items 0/40</strong><strong id="villagerCount">Villager requested 0/1</strong></div><div class="cartLinkRow"><button class="cta" type="button" id="addMoreCart">+ Add more items</button><button class="secondary" type="button" id="addVillagerCart">+ Add a villager</button></div>
-<div class="cartProgress"><div id="cartProgressBar"></div></div><h3 class="cartSectionTitle">REQUESTED ITEMS</h3><div id="cartList" class="requestedCards"></div><details class="compactSlots"><summary>View 40-slot pocket grid</summary><div class="slots" id="slots"></div></details><h3 class="cartSectionTitle">REQUESTED VILLAGER</h3><div id="cartVillager" class="cartVillager"></div>
+<div class="cartProgress"><div id="cartProgressBar"></div></div><h3 class="cartSectionTitle">REQUESTED ITEMS</h3><div id="cartList" class="requestedCards"></div><div id="slots" class="slots" hidden style="display:none !important" aria-hidden="true"></div><h3 class="cartSectionTitle">REQUESTED VILLAGER</h3><div id="cartVillager" class="cartVillager"></div>
 <div id="remainingOptions" class="fillOptions" role="group" aria-label="Unused pocket slots">
 <h3 id="remainingHeading">Unused pocket slots</h3>
 <label><input type="radio" name="fill" value="default" checked><span><strong>Default bot behavior</strong><small>Leave extra slots unchanged; SysBot determines how to fill the order.</small></span></label>
@@ -136,5 +136,5 @@
 <script src="villagers-data.js?v=20261111-explorer-v4"></script>
 <script src="catalog-expansion.js?v=20261111-variations-v1"></script>
 <script src="collection-presets.js?v=20261111-realroom-v1"></script>
-<script src="app.js?v=20261111-copy-notice-v1"></script>
+<script src="app.js?v=20261111-clear-errors-v3"></script>
 </body></html>
