@@ -1,12 +1,7 @@
-WISHPORT — NOOK MILES TICKET FILLER FIX
+WishPort Nook Miles Ticket displayed label correction.
 
-Fix: NMT filler ID 0EF8 (orange-cosmos plant) -> 16DB (Nook Miles Ticket).
-Checked: Royal Crown 14BB and 99,000 Bells 08A4 match published item IDs, unchanged.
+The current public app.js already generates 16DB as the NMT filler ID. However index.html still displays "Uses item code 0EF8". This package changes ONLY that displayed label to 16DB and updates the app.js cache-busting version query so Safari fetches the current app.js.
 
-INSTALL: Save a backup of current working app.js; replace ONLY app.js at repository root. Commit, then reload WishPort (consider private tab to bypass cache).
+Upload ONLY index.html to the ROOT of your WishPort GitHub repository, replacing the existing one. Do not overwrite app.js. Your collections and other files remain untouched.
 
-TEST: Add 1 known item, select Nook Miles Ticket filler. Verify the generated command has 40 codes: your selected item first, then 39 instances of 16DB. Try Crown and Bells fillers and verify 14BB and 08A4 respectively.
-
-Note: 16DB specifies the ticket item ID, not necessarily a full stack of 10 tickets. In-game delivery should be tested separately if full stacks are desired.
-
-Source: mpql.net/tools/acnh/codes/item-list/; item listing also available in common ACNH item-ID tables.
+Testing: Static HTML validated: exactly one NMT label, 16DB; crowns=14BB; bells=08A4. Live bot delivery and full ticket stack quantity are not verified.
