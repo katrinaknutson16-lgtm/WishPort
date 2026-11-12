@@ -1,0 +1,19 @@
+WishPort collection code structure audit
+Checks 16-digit hexadecimal structure, duplicate slots and counts; NOT bot compatibility or item identity.
+
+Blue and White Bathroom: 40 slots; 8 repeated slots; invalid codes: none
+Blue Bedroom: 40 slots; 6 repeated slots; invalid codes: none
+Classic Library: 40 slots; 10 repeated slots; invalid codes: none
+Colorful Clubhouse: 38 slots; 0 repeated slots; invalid codes: none
+Elegant Living: 40 slots; 15 repeated slots; invalid codes: none
+Gaming Room: 40 slots; 14 repeated slots; invalid codes: none
+Harmonious Bathroom: 40 slots; 6 repeated slots; invalid codes: none
+Japanese Living: 40 slots; 4 repeated slots; invalid codes: none
+Magic Study: 40 slots; 4 repeated slots; invalid codes: none
+Sci-Fi Bar: 40 slots; 20 repeated slots; invalid codes: none
+Tropical Bedroom: 40 slots; 8 repeated slots; invalid codes: none
+White Ranch Kitchen: 40 slots; 4 repeated slots; invalid codes: none
+
+The 38-slot Colorful Clubhouse preset is retained as provided, not padded with invented items.
+Villager awake status cannot be inferred without verified island time and bot behavior.
+Test small orders with bot inventory validation enabled.
