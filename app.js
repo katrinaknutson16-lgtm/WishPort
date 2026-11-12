@@ -173,7 +173,7 @@ const issueSummary=(entries,limit=5)=>{
 };
 const makeCodes=()=>{if(pocket.some(x=>disallowedOrderEntry(x)))return null;const codes=pocket.map(codeFor);if(codes.some(c=>!(/^[0-9A-F]{4}$/i.test(c)||/^(?:[0-9A-F]{16}|0000[0-9A-F]{4}000016A2)$/i.test(c))||DISALLOWED_CODES.has(String(c).toUpperCase())))return null;
  const remain=40-codes.length;
- if(fillMode==='nmt')codes.push(...Array(remain).fill('0EF8'));
+ if(fillMode==='nmt')codes.push(...Array(remain).fill('16DB')); // Verified Nook Miles Ticket ID; 0EF8 is an orange-cosmos plant
  if(fillMode==='crowns')codes.push(...Array(remain).fill('14BB'));
  if(fillMode==='bells')codes.push(...Array(remain).fill('08A4'));
  if(!codes.length&&chosenVillager)return null; // Choose at least one item before villager orders
