@@ -1,9 +1,14 @@
-WISHPORT — SELECTED ITEM CARD UPDATE
+WISHPORT CATEGORY / THEME / SERIES / INTERACTION / COLOUR UPDATE
 
-Upload ONLY app.js to the root of your WishPort GitHub repository (beside index.html). Replace the existing app.js. Commit changes and refresh the WishPort website.
+Upload these THREE files into the ROOT of your WishPort GitHub repository:
+  - index.html (replace)
+  - app.js (replace)
+  - wishport-filter-data.js (NEW)
 
-Catalog cards now show a green ✓ ADDED badge, highlighted border, and minus / quantity / plus controls over the item's picture. Removing the final selected copy restores the Add item button. Quantity controls respect the existing 40-slot limit and preserve order-code validation.
+Do not upload the XLSX source. Keep the existing catalog-data.js, catalog-expansion.js, style.css, order-layout.css, collection-presets.js, photos, villagers and help files.
 
-This patch uses the latest app.js from the prior Big Copy Popup update. It changes catalog item-card display and selected-card controls only. It does not include catalog files, collection pictures, or website layout files.
+Filters are generated from the ACNH spreadsheet HHA concepts, HHA series, Interact and Color 1/2 metadata. Categories have user-requested labels. Original order codes / safety rules have not been changed.
 
-After uploading, test one item, a variation, and a 40/40 cart. Verify copy commands with your own bot before general release.
+IMPORTANT: The supplied ACNH source spreadsheet does not cover all third-party 3.0-only content. Those items may not match a theme, series, interaction or color filter until the relevant metadata is provided. Filter values with no matching catalog items return zero results; they are not populated with guessed matches.
+
+After commit and deploy: hard-refresh on iPhone, then test Category > Housewares; Theme > bathroom; Series > Cinnamoroll; Interaction > Chair; Colour > Blue. Test order copying separately.
