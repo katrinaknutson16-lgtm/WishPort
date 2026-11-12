@@ -1,0 +1,198 @@
+{
+  "items": 26177,
+  "variationLabels": 21861,
+  "variantUnsafe": 7499,
+  "invalidCatalog": 14152,
+  "filter": {
+    "category": {
+      "options": 38,
+      "missing": [
+        "Bugs",
+        "Fishing",
+        "Interior Structures",
+        "Plants",
+        "Sea Creatures"
+      ],
+      "top": [
+        [
+          "housewares",
+          9019
+        ],
+        [
+          "villager photos",
+          3832
+        ],
+        [
+          "miscellaneous",
+          3378
+        ],
+        [
+          "clothing - tops",
+          1328
+        ]
+      ]
+    },
+    "theme": {
+      "options": 47,
+      "missing": [],
+      "top": [
+        [
+          "living room",
+          3389
+        ],
+        [
+          "child's room",
+          2185
+        ],
+        [
+          "facility",
+          1207
+        ],
+        [
+          "fancy",
+          1063
+        ]
+      ]
+    },
+    "series": {
+      "options": 56,
+      "missing": [],
+      "top": [
+        [
+          "simple",
+          487
+        ],
+        [
+          "nordic",
+          391
+        ],
+        [
+          "wooden",
+          383
+        ],
+        [
+          "elegant",
+          360
+        ]
+      ]
+    },
+    "interaction": {
+      "options": 13,
+      "missing": [],
+      "top": [
+        [
+          "yes",
+          3223
+        ],
+        [
+          "chair",
+          1609
+        ],
+        [
+          "bed",
+          709
+        ],
+        [
+          "wardrobe",
+          526
+        ]
+      ]
+    },
+    "color": {
+      "options": 14,
+      "missing": [],
+      "top": [
+        [
+          "white",
+          8718
+        ],
+        [
+          "green",
+          7949
+        ],
+        [
+          "black",
+          7011
+        ],
+        [
+          "yellow",
+          6690
+        ]
+      ]
+    }
+  },
+  "presets": [
+    {
+      "name": "Blue and White Bathroom",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Blue Bedroom",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Classic Library",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Colorful Clubhouse",
+      "slots": 38,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Elegant Living",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Gaming Room",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Harmonious Bathroom",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Japanese Living",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Magic Study",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Sci-Fi Bar",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "Tropical Bedroom",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    },
+    {
+      "name": "White Ranch Kitchen",
+      "slots": 40,
+      "items": 0,
+      "invalid": 0
+    }
+  ]
+}
