@@ -1,0 +1,17 @@
+WishPort catalog update — November 13, 2026
+
+Unzip this file. Upload index.html, the three JavaScript files, and the
+other-item-images folder to the root of your existing WishPort repository.
+Commit them together, then refresh the site when GitHub Pages finishes.
+
+This update uses the November 13 Pange Plays Item Explorer snapshot for
+the database listings. It includes 26,532 listings in 37 categories.
+Plants has 128 listings. The displayed IDs, default order, and image URLs
+come from the visible reference cards. Images load from their original URLs.
+The ACNH Data Spreadsheet team is credited by Pange for the underlying data.
+
+Keep the existing collection presets and cover folder in the repo. The
+database update preserves the prior collection item lookup and preset codes.
+WishPort passes through the catalog's 13-character fencing codes.
+If you already installed the first version of this catalog update, replace
+only index.html and app-wishport-pange-20261113.js.

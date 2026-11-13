@@ -6,10 +6,10 @@
  const catalog=window.WISHPORT_ITEMS;
  if(!Array.isArray(catalog)) return;
  const additions=[
-  {hex:'1222',name:'What was this again? (Bag)',version:'1.0.0'},
-  {hex:'1223',name:'What was this again? (Book)',version:'1.0.0'},
-  {hex:'1533',name:'What was this again? (Planner)',version:'1.0.0'},
-  {hex:'39E4',name:'Paradise Planning case',version:'2.0.0'},
+  {hex:'1222',name:'What was this again? (Bag)',version:'1.0.0',image:'other-item-images/1222.png'},
+  {hex:'1223',name:'What was this again? (Book)',version:'1.0.0',image:'other-item-images/1223.png'},
+  {hex:'1533',name:'What was this again? (Planner)',version:'1.0.0',image:'other-item-images/1533.png'},
+  {hex:'39E4',name:'Paradise Planning case',version:'2.0.0',image:'other-item-images/39E4.png'},
   {hex:'08A4',name:'99,000 Bells',version:'1.0.0',image:'https://acnhcdn.com/latest/MenuIcon/MoneyBag010.png'},
   {hex:'0A51',name:'100 Turnips',version:'1.0.0',image:'https://acnhcdn.com/latest/MenuIcon/Kabu.png'}
  ];
