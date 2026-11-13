@@ -1,21 +1,15 @@
-WISHPORT: REMOVE NON-ORDERABLE CONSTRUCTION REFERENCES
+WISHPORT VEGGIES FILTER + IMAGE CORRECTION
 
-Upload only app.js to the ROOT of the WishPort GitHub repository, replacing the existing app.js.
-Back up your currently working app.js first.
+Upload these two paths into the ROOT of your WishPort GitHub repository:
+1. app.js (replace current file; back it up first)
+2. veggie-images/potato.png (create veggie-images folder if needed)
 
-What changed:
-- Hides Construction entries that have no hex/orderHex item code from the browse/search catalog.
-- In the audited base catalog, 353 Construction entries meet that condition (e.g. bridges, doors).
-- Does not delete catalog-data.js, change item codes, modify saved orders or collections,
-  change cart/order generation, or affect the visual design.
-- Existing preview-only item variations and blocked DIY entries remain visible with their
-  existing protections; they are NOT silently made orderable. (We have not removed those.)
+WHY: Pange Veggies shows exactly 9 harvested crops: carrot, potato, four pumpkin colors, sugarcane, tomato, wheat. Crop starts belong under Seeds and Starts; whole-wheat flour belongs under Other.
 
-Checks:
-- node --check passed.
-- Audited base catalog: 7,802 entries -> 7,449 visible after filtering 353 construction references.
-- Expected expanded listing count may differ because catalog-expansion.js multiplies item variations.
+The potato image is isolated from your supplied Pange screenshot; the other 8 harvested crop icons already use matching original game art.
 
-IMPORTANT: Based on the latest locally saved category-cleanup app.js. If you've updated
-app.js on GitHub afterward, merge this small change into the current file rather than
-replacing newer work.
+No item ID/order code, cart, quantity, or villager order logic changed.
+
+Check Category Selection > Veggies. If old categories persist, reload Safari after deployment.
+
+IMPORTANT: This app.js was patched from the most recent local WishPort version in this conversation. If you have made GitHub edits since the last update, merge instead of overwriting.

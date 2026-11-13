@@ -62,6 +62,34 @@ window.wishportImageError=function(img){
  img.replaceWith(missing);
 };
 // WishPort explorer v4: filters are intentional suggestions, not authoritative gameplay classifications.
+// Match Pange's harvested Veggies category without changing any order hex codes.
+// Crop starts belong to Seeds and Starts; processed flour belongs to Other.
+// Using the existing filter metadata avoids moving/deleting orderable items.
+const wishportHarvestedVeggies=new Set(['carrot','potato','green pumpkin','white pumpkin','yellow pumpkin','orange pumpkin','sugarcane','tomato','wheat']);
+const wishportCropStarts=new Set(['carrot start','potato start','pumpkin start','sugarcane start','tomato start','wheat start']);
+const wishportFilterBase=window.WISHPORT_FILTER_METADATA?.base||{};
+for (const name of wishportHarvestedVeggies){
+ const key=name+'|other';
+ const previous=wishportFilterBase[key]||{};
+ wishportFilterBase[key]={...previous,g:['Veggies']};
+}
+for (const name of wishportCropStarts){
+ const key=name+'|other';
+ const previous=wishportFilterBase[key]||{};
+ wishportFilterBase[key]={...previous,g:['Seeds and Starts']};
+}
+for (const name of ['whole-wheat flour']){
+ const key=name+'|other';
+ const previous=wishportFilterBase[key]||{};
+ wishportFilterBase[key]={...previous,g:['Other']};
+}
+// Use the precise potato icon from the screenshot the site owner supplied.
+// All other harvested veggie thumbnails already use the original game icons.
+for(const x of (window.WISHPORT_ITEMS||[])){
+ if(String(x.name||'').toLowerCase()==='potato' && x.category==='Other'){
+  x.image='veggie-images/potato.png';
+ }
+}
 const filterCatalog=window.WISHPORT_FILTER_METADATA||{base:{},variations:{},options:{}};
 const filterOpts=filterCatalog.options||{};
 const filterKey=x=>String(x.name||'').toLowerCase()+'|'+String(x.category||'').toLowerCase();
