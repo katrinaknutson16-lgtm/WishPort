@@ -1,15 +1,15 @@
-WISHPORT VEGGIES FILTER + IMAGE CORRECTION
+WishPort full category and picture cleanup
 
-Upload these two paths into the ROOT of your WishPort GitHub repository:
-1. app.js (replace current file; back it up first)
-2. veggie-images/potato.png (create veggie-images folder if needed)
+Install:
+1. Replace your current app.js with the app.js in this folder.
+2. Keep the veggie-images folder and potato.png in the main site folder.
+3. Commit and refresh Safari.
 
-WHY: Pange Veggies shows exactly 9 harvested crops: carrot, potato, four pumpkin colors, sugarcane, tomato, wheat. Crop starts belong under Seeds and Starts; whole-wheat flour belongs under Other.
-
-The potato image is isolated from your supplied Pange screenshot; the other 8 harvested crop icons already use matching original game art.
-
-No item ID/order code, cart, quantity, or villager order logic changed.
-
-Check Category Selection > Veggies. If old categories persist, reload Safari after deployment.
-
-IMPORTANT: This app.js was patched from the most recent local WishPort version in this conversation. If you have made GitHub edits since the last update, merge instead of overwriting.
+What this fixes:
+- Harvested veggies show only the 9 picked crops.
+- Crop starts move to Seeds and Starts, including seed potato.
+- Sea Creatures and Plants are explicitly restored to their categories.
+- Picked Flowers restores the missing orange flower items.
+- Handheld drinks and food are removed from the Tools tab and placed under Other.
+- Potato uses the supplied Pange-matching icon.
+- Item icon styling now blends white box backgrounds more cleanly into the dark UI.

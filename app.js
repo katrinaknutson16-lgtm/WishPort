@@ -2,7 +2,8 @@ window.WISHPORT_FILTER_METADATA={"base":{"? block|housewares":{"t":["child's roo
 (()=>{'use strict';// Keep construction-only catalogue references with no order code out of public search.
 // These 353 references (bridges/doors/etc.) cannot be delivered as pocket items.
 // Preserve the underlying catalog file and all existing orderable items/variations.
-const items=(window.WISHPORT_ITEMS || []).filter(x=>!(x.category==='Construction' && !String(x.hex||x.orderHex||'').trim()));const DISALLOWED_CODES=new Set(['35DB','10DB','10DC','10DD']);const isDIY=x=>x&&x.category==='Recipes';const orderCode=x=>isDIY(x)?String(x.orderHex||(/^0000[0-9A-F]{4}000016A2$/i.test(String(x.hex||''))?x.hex:'')):String(x.hex||'');const validItemCode=x=>isDIY(x)?/^0000[0-9A-F]{4}000016A2$/i.test(orderCode(x)): /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(orderCode(x));const disallowedOrderEntry=x=>!x||x.variantOrderSafe===false||x.recipeStatus==='blocked'||!validItemCode(x)||DISALLOWED_CODES.has(String(x.hex||'').toUpperCase())||['magic bag','communicator','communicator part'].includes(String(x.name||'').toLowerCase());if(!items.length){document.getElementById('summary').textContent='Catalog data could not load. Check that catalog-data.js is uploaded alongside index.html.';return;}const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));const addedStyles=document.createElement('style');addedStyles.textContent='\n.item.wishSelected{border-color:#8a44c1 !important;box-shadow:0 0 0 1px rgba(169,95,223,.55);}\n.item .art.picture{position:relative;overflow:hidden;}\n.wishAddedBadge{position:absolute;left:10px;top:10px;background:#159953;color:white;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800;letter-spacing:.09em;box-shadow:0 3px 8px #0004;z-index:2;white-space:nowrap}\n.wishQtyOverlay{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:5px;background:rgba(16,13,22,.90);border-radius:11px;padding:5px;color:#d9c2fc;z-index:2}\n.wishQtyOverlay button{border:0;background:#9632e0;color:#fff;border-radius:9px;min-width:35px;min-height:36px;font-size:25px;font-weight:700;line-height:1;cursor:pointer}\n.wishQtyOverlay [data-selected-minus]{background:#d31a85}\n.wishQtyOverlay output{min-width:20px;text-align:center;font-size:18px;font-weight:800}\n.wishQtyOverlay button:disabled{opacity:.4;cursor:not-allowed}\n.item .add[hidden]{display:none !important}\n';document.head.appendChild(addedStyles);let page=0,filtered=[],chosen=null,pocket=[],fav=new Set();let fillMode='default';try{fillMode=localStorage.getItem('wishport_fill')||'default'}catch(e){}let chosenVillager=null;try{const savedVillager=JSON.parse(localStorage.getItem("wishport_villager")||"null");if(savedVillager&&/^[A-Za-z0-9]{3,12}$/.test(savedVillager.id))chosenVillager=savedVillager;}catch(e){}try{const saved=JSON.parse(localStorage.getItem('wishport_pocket')||'[]');if(Array.isArray(saved))pocket=saved.slice(0,40);}catch(e){}try{fav=new Set(JSON.parse(localStorage.getItem('wishport_favorites')||'[]'));}catch(e){}// Drop cached pocket items that are no longer eligible for the order builder.
+const items=(window.WISHPORT_ITEMS || []).filter(x=>!(x.category==='Construction' && !String(x.hex||x.orderHex||'').trim()));const DISALLOWED_CODES=new Set(['35DB','10DB','10DC','10DD']);const isDIY=x=>x&&x.category==='Recipes';const orderCode=x=>isDIY(x)?String(x.orderHex||(/^0000[0-9A-F]{4}000016A2$/i.test(String(x.hex||''))?x.hex:'')):String(x.hex||'');const validItemCode=x=>isDIY(x)?/^0000[0-9A-F]{4}000016A2$/i.test(orderCode(x)): /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(orderCode(x));const disallowedOrderEntry=x=>!x||x.variantOrderSafe===false||x.recipeStatus==='blocked'||!validItemCode(x)||DISALLOWED_CODES.has(String(x.hex||'').toUpperCase())||['magic bag','communicator','communicator part'].includes(String(x.name||'').toLowerCase());if(!items.length){document.getElementById('summary').textContent='Catalog data could not load. Check that catalog-data.js is uploaded alongside index.html.';return;}const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));const addedStyles=document.createElement('style');addedStyles.textContent='\n.item.wishSelected{border-color:#8a44c1 !important;box-shadow:0 0 0 1px rgba(169,95,223,.55);}\n.item .art.picture{position:relative;overflow:hidden;}\n.wishAddedBadge{position:absolute;left:10px;top:10px;background:#159953;color:white;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800;letter-spacing:.09em;box-shadow:0 3px 8px #0004;z-index:2;white-space:nowrap}\n.wishQtyOverlay{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:5px;background:rgba(16,13,22,.90);border-radius:11px;padding:5px;color:#d9c2fc;z-index:2}\n.wishQtyOverlay button{border:0;background:#9632e0;color:#fff;border-radius:9px;min-width:35px;min-height:36px;font-size:25px;font-weight:700;line-height:1;cursor:pointer}\n.wishQtyOverlay [data-selected-minus]{background:#d31a85}\n.wishQtyOverlay output{min-width:20px;text-align:center;font-size:18px;font-weight:800}\n.wishQtyOverlay button:disabled{opacity:.4;cursor:not-allowed}\n.item .add[hidden]{display:none !important}\n';document.head.appendChild(addedStyles);
+addedStyles.textContent += '\n.item .art.picture,.requestedPicture,.selectionPicture,.presetItem img{isolation:isolate;}\n.item .art.picture img,.requestedPicture img,.selectionPicture img,.presetItem img{mix-blend-mode:multiply;filter:saturate(1.08) brightness(1.04);}\n';let page=0,filtered=[],chosen=null,pocket=[],fav=new Set();let fillMode='default';try{fillMode=localStorage.getItem('wishport_fill')||'default'}catch(e){}let chosenVillager=null;try{const savedVillager=JSON.parse(localStorage.getItem("wishport_villager")||"null");if(savedVillager&&/^[A-Za-z0-9]{3,12}$/.test(savedVillager.id))chosenVillager=savedVillager;}catch(e){}try{const saved=JSON.parse(localStorage.getItem('wishport_pocket')||'[]');if(Array.isArray(saved))pocket=saved.slice(0,40);}catch(e){}try{fav=new Set(JSON.parse(localStorage.getItem('wishport_favorites')||'[]'));}catch(e){}// Drop cached pocket items that are no longer eligible for the order builder.
 const eligibleKeys=new Set(items.map(x=>x.name+'|'+x.category));
 const presetCodes=new Set((window.WISHPORT_PRESETS||[]).flatMap(p=>p.codes||[]));
 const beforePrune=pocket.length;
@@ -62,31 +63,42 @@ window.wishportImageError=function(img){
  img.replaceWith(missing);
 };
 // WishPort explorer v4: filters are intentional suggestions, not authoritative gameplay classifications.
-// Match Pange's harvested Veggies category without changing any order hex codes.
-// Crop starts belong to Seeds and Starts; processed flour belongs to Other.
-// Using the existing filter metadata avoids moving/deleting orderable items.
-const wishportHarvestedVeggies=new Set(['carrot','potato','green pumpkin','white pumpkin','yellow pumpkin','orange pumpkin','sugarcane','tomato','wheat']);
-const wishportCropStarts=new Set(['carrot start','potato start','pumpkin start','sugarcane start','tomato start','wheat start']);
+// This audit syncs the browsing categories more closely with Pange-style browsing,
+// restores missing category membership, and cleans up a few picture problems.
 const wishportFilterBase=window.WISHPORT_FILTER_METADATA?.base||{};
-for (const name of wishportHarvestedVeggies){
- const key=name+'|other';
+const wishportItems=window.WISHPORT_ITEMS||[];
+const wishportSetGroup=(itemName,rawCategory,group)=>{
+ const key=String(itemName||'').toLowerCase()+'|'+String(rawCategory||'').toLowerCase();
  const previous=wishportFilterBase[key]||{};
- wishportFilterBase[key]={...previous,g:['Veggies']};
-}
-for (const name of wishportCropStarts){
- const key=name+'|other';
- const previous=wishportFilterBase[key]||{};
- wishportFilterBase[key]={...previous,g:['Seeds and Starts']};
-}
-for (const name of ['whole-wheat flour']){
- const key=name+'|other';
- const previous=wishportFilterBase[key]||{};
- wishportFilterBase[key]={...previous,g:['Other']};
+ wishportFilterBase[key]={...previous,g:[group]};
+};
+const wishportHarvestedVeggies=new Set(['carrot','potato','green pumpkin','white pumpkin','yellow pumpkin','orange pumpkin','sugarcane','tomato','wheat']);
+const wishportCropStarts=new Set(['carrot start','seed potato','pumpkin start','sugarcane start','tomato start','wheat start']);
+const wishportHandheldFoodAndDrink=new Set([
+ 'berry-vanilla soft serve','boba coffee','boba green tea','boba mango tea','boba milk tea','boba strawberry tea',
+ 'canned apple juice','canned coffee','canned grape juice','canned green tea','canned orange juice','canned soda','canned sports drink','canned tea',
+ 'chitose ame','chocolate cone','chocolate donut','chocolate frozen treat','chocolate soft serve',
+ 'matcha donut','matcha-vanilla soft serve','melon cotton candy','melon-cheesecake cone','orange frozen treat','orange-mint cone',
+ 'plain cotton candy','protein shake','rainbow soft serve','ramune-soda cotton candy','ramune-soda frozen treat','ramune-soda-lemon cone',
+ 'shamrock soda','sparkling cider','strawberry cone','strawberry cotton candy','strawberry donut','takeout coffee',
+ 'vanilla cone','vanilla soft serve','white-chocolate donut'
+]);
+const wishportPickedFlowerPattern=/^(black|blue|gold|green|orange|pink|purple|red|white|yellow) (cosmos|hyacinths|lilies|mums|pansies|roses|tulips|windflowers)$/i;
+for(const item of wishportItems){
+ const name=String(item.name||'').toLowerCase();
+ const rawCategory=String(item.category||'');
+ const rawLower=rawCategory.toLowerCase();
+ if(wishportHarvestedVeggies.has(name)) wishportSetGroup(name,rawCategory,'Veggies');
+ if(wishportCropStarts.has(name)) wishportSetGroup(name,rawCategory,'Seeds and Starts');
+ if(name==='whole-wheat flour' && rawLower==='other') wishportSetGroup(name,rawCategory,'Other');
+ if(wishportHandheldFoodAndDrink.has(name) && rawLower==='toolsgoods') wishportSetGroup(name,rawCategory,'Other');
+ if(wishportPickedFlowerPattern.test(name) && rawLower==='other') wishportSetGroup(name,rawCategory,'Picked Flowers');
+ if(rawCategory==='Sea Creatures') wishportSetGroup(name,rawCategory,'Sea Creatures');
+ if(rawCategory==='Plants') wishportSetGroup(name,rawCategory,'Plants');
 }
 // Use the precise potato icon from the screenshot the site owner supplied.
-// All other harvested veggie thumbnails already use the original game icons.
-for(const x of (window.WISHPORT_ITEMS||[])){
- if(String(x.name||'').toLowerCase()==='potato' && x.category==='Other'){
+for(const x of wishportItems){
+ if(String(x.name||'').toLowerCase()==='potato' && String(x.category||'').toLowerCase()==='other'){
   x.image='veggie-images/potato.png';
  }
 }
