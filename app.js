@@ -250,7 +250,22 @@ $('confirmCopy').onclick=async()=>{const txt=cmd();if(!txt||!makeCodes()||!pocke
 
 
 extraFilterIds.forEach(id=>$(id).onchange=()=>{page=0;apply()});$('showVariants').onchange=()=>render();$('hideVariants').onchange=()=>{$('showVariants').checked=!$('hideVariants').checked;render()};$('explorerCart').onclick=()=>{$('openCart').click()};$('pageSize').onchange=()=>{pageSize=Number($('pageSize').value)||50;page=0;render()};$('goPage').onclick=()=>{const max=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(max,Math.max(1,Number($('jumpPage').value)||1))-1;render();$('search').scrollIntoView({block:'start'})};$('resetFilters').onclick=()=>{extraFilterIds.forEach(id=>$(id).value='');$('search').value='';$('category').value='';$('version').value='';quick='all';$('pills').querySelectorAll('.pill').forEach((b,i)=>b.classList.toggle('active',i===0));page=0;apply()};
-$('search').oninput=()=>{page=0;apply()};$('category').onchange=()=>{page=0;apply()};$('version').onchange=()=>{page=0;apply()};$('sort').onchange=()=>{page=0;apply()};
+$('search').oninput=()=>{page=0;apply()};
+// A category pick starts a fresh category browse. Earlier quick-pill, version, and
+// secondary filter selections could silently hide all results (especially Plants).
+// Keep the selected category, but clear incompatible selections; users can
+// refine with Theme/Series/Interaction/Colour after choosing a category.
+function beginCategoryBrowse(){
+ quick='all';
+ $('pills').querySelectorAll('.pill').forEach((b,i)=>b.classList.toggle('active',i===0));
+ $('version').value='';
+ $('search').value='';
+ extraFilterIds.forEach(id=>$(id).value='');
+ page=0;
+ apply();
+}
+$('category').onchange=beginCategoryBrowse;
+$('version').onchange=()=>{page=0;apply()};$('sort').onchange=()=>{page=0;apply()};
 // New catalog sections: Database, Collections and Categories.
 const tabs=document.querySelectorAll('[data-tab]');
 function activateTab(tab){if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers'].forEach(name=>$(name+'Panel').hidden=name!==tab);}
@@ -258,7 +273,7 @@ tabs.forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 const catCounts=new Map();items.forEach(x=>catCounts.set(categoryFor(x),(catCounts.get(categoryFor(x))||0)+1));
 $('categoryGrid').innerHTML=[...catCounts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([c,n])=>`<button class="categoryTile" data-cat="${esc(c)}"><span class="categorySymbol" aria-hidden="true">${esc(c.slice(0,1).toUpperCase())}</span><span class="categoryLabel">${esc(c)}</span><span class="categoryCount">${n.toLocaleString()} items</span></button>`).join('');
 $('shopMaterials').onclick=()=>{activateTab('database');quick='all';$('search').value='';$('category').value='group:Materials';$('version').value='';page=0;apply();document.querySelector('.browseTabs').scrollIntoView({block:'start'});};
-$('categoryGrid').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;activateTab('database');quick='all';$('pills').querySelectorAll('.pill').forEach((x,i)=>x.classList.toggle('active',i===0));$('search').value='';$('version').value='';$('category').value=b.dataset.cat;page=0;apply();document.querySelector('.browseTabs').scrollIntoView({block:'start',behavior:'smooth'});};
+$('categoryGrid').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;activateTab('database');$('category').value=b.dataset.cat;beginCategoryBrowse();document.querySelector('.browseTabs').scrollIntoView({block:'start',behavior:'smooth'});};
 // Exactly twelve curated collections; original 16-character order codes are never recalculated.
 const presetRows=window.WISHPORT_PRESETS||[];
 const catalogByID=new Map();
