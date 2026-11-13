@@ -26,7 +26,8 @@ wishportDarkImageFix.textContent=`
 `;
 document.head.appendChild(wishportDarkImageFix);
 
-// Original image styling retained; no blend mode or brightening overlays.let page=0,filtered=[],chosen=null,pocket=[],fav=new Set();let fillMode='default';try{fillMode=localStorage.getItem('wishport_fill')||'default'}catch(e){}let chosenVillager=null;try{const savedVillager=JSON.parse(localStorage.getItem("wishport_villager")||"null");if(savedVillager&&/^[A-Za-z0-9]{3,12}$/.test(savedVillager.id))chosenVillager=savedVillager;}catch(e){}try{const saved=JSON.parse(localStorage.getItem('wishport_pocket')||'[]');if(Array.isArray(saved))pocket=saved.slice(0,40);}catch(e){}try{fav=new Set(JSON.parse(localStorage.getItem('wishport_favorites')||'[]'));}catch(e){}// Drop cached pocket items that are no longer eligible for the order builder.
+// Original image styling retained; no blend mode or brightening overlays.
+let page=0,filtered=[],chosen=null,pocket=[],fav=new Set();let fillMode='default';try{fillMode=localStorage.getItem('wishport_fill')||'default'}catch(e){}let chosenVillager=null;try{const savedVillager=JSON.parse(localStorage.getItem("wishport_villager")||"null");if(savedVillager&&/^[A-Za-z0-9]{3,12}$/.test(savedVillager.id))chosenVillager=savedVillager;}catch(e){}try{const saved=JSON.parse(localStorage.getItem('wishport_pocket')||'[]');if(Array.isArray(saved))pocket=saved.slice(0,40);}catch(e){}try{fav=new Set(JSON.parse(localStorage.getItem('wishport_favorites')||'[]'));}catch(e){}// Drop cached pocket items that are no longer eligible for the order builder.
 const eligibleKeys=new Set(items.map(x=>x.name+'|'+x.category));
 const presetCodes=new Set((window.WISHPORT_PRESETS||[]).flatMap(p=>p.codes||[]));
 const beforePrune=pocket.length;
