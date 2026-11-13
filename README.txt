@@ -1,19 +1,14 @@
-WISHPORT STABLE RECOVERY — FROM YOUR NOVEMBER 12 BACKUP
+WishPort — Other category update
 
-This package restores the November 12 backup's matching index.html and application script, but uses a NEW, unique JavaScript filename to avoid Safari's cached app.js.
+Upload these three files to the root of your existing WishPort repository:
+- index.html
+- app-stable-filters-20261113.js
+- catalog-nature-restored.js
 
-FILES TO UPLOAD TO YOUR MAIN WISHPORT GITHUB FOLDER:
-1. index.html  — replace existing index.html
-2. app-recovery-20261113.js  — upload as a NEW file
+This includes the dark-card and nature restoration patch. Materials includes Aquarius fragment, Aries fragment, bean-tossing kit,
+and Bell bag. The Other category contains the 24 reference IDs. Extra entries remain in the catalog. Handheld
+food and drinks are under Food and Drinks. Extra seeds and materials use their
+existing categories, and the remaining items appear in Miscellaneous.
 
-DO NOT delete current app.js, catalog-data.js, catalog-expansion.js, collection-presets.js, villagers-data.js, photos or styles.
-
-Important: this recovery temporarily reverts category/picture/scrolling changes made AFTER the November 12 backup. Keep your existing veggie-images folder; you may merge later after basic loading works.
-The known Nook Miles Ticket filler code is corrected to 16DB in the backup code and label.
-
-When GitHub Pages has published, open your website with a unique URL:
-https://katrinaknutson16-lgtm.github.io/WishPort/?recovery=20261113
-
-The only files you replace are index.html plus a new named script. Your 12 collections, data, photos and other assets are still present.
-
-VALIDATION: JavaScript parses with node --check; the required seven external website dependencies are byte-for-byte identical in the backup and current ZIP, but full live iPhone testing remains necessary.
+The three lost items and Paradise Planning case have no verified image URL
+in the supplied catalog, so their cards show an image placeholder.
