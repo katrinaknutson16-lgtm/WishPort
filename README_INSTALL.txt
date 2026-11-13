@@ -1,27 +1,21 @@
-WishPort — Plants / Category Results Fix
+WISHPORT: REMOVE NON-ORDERABLE CONSTRUCTION REFERENCES
 
-Replace ONLY app.js in the ROOT of your GitHub WishPort repository.
-Back up the current app.js first. Do not replace index.html or catalog-data.js.
+Upload only app.js to the ROOT of the WishPort GitHub repository, replacing the existing app.js.
+Back up your currently working app.js first.
 
-What changed
-- Selecting a Category now clears any previously selected quick filter, hidden
-  game version, search query, theme, series, interaction and colour filters.
-- Selecting a category from the category browsing tiles does the same.
-- After selecting a category, other filters can be applied normally to narrow it.
-- No changes to item IDs, collections, cart, saved orders, filler codes,
-  quantity grouping, villager requests, or website appearance.
+What changed:
+- Hides Construction entries that have no hex/orderHex item code from the browse/search catalog.
+- In the audited base catalog, 353 Construction entries meet that condition (e.g. bridges, doors).
+- Does not delete catalog-data.js, change item codes, modify saved orders or collections,
+  change cart/order generation, or affect the visual design.
+- Existing preview-only item variations and blocked DIY entries remain visible with their
+  existing protections; they are NOT silently made orderable. (We have not removed those.)
 
-Why
-- Previous quick-pill and game-version selections stayed active when switching
-  Category. Plants primarily uses original-version items, so a lingering
-  3.0-only filter could make Plants look empty.
+Checks:
+- node --check passed.
+- Audited base catalog: 7,802 entries -> 7,449 visible after filtering 353 construction references.
+- Expected expanded listing count may differ because catalog-expansion.js multiplies item variations.
 
-Verification
-- Verified 312 Plant base entries in the local catalog and metadata.
-- JavaScript syntax passed node --check.
-- Live Safari/browser behavior and bot fulfillment not tested.
-
-Check after install
-1. In Database choose Plants. You should see results, not 0.
-2. Pick a Theme/Colour to confirm refining works after choosing Plants.
-3. Your cart and order command should still be unchanged.
+IMPORTANT: Based on the latest locally saved category-cleanup app.js. If you've updated
+app.js on GitHub afterward, merge this small change into the current file rather than
+replacing newer work.
