@@ -3,6 +3,7 @@ window.WISHPORT_FILTER_METADATA={"base":{"? block|housewares":{"t":["child's roo
 // These 353 references (bridges/doors/etc.) cannot be delivered as pocket items.
 // Preserve the underlying catalog file and all existing orderable items/variations.
 const items=(window.WISHPORT_ITEMS || []).filter(x=>!(x.category==='Construction' && !String(x.hex||x.orderHex||'').trim()));const DISALLOWED_CODES=new Set(['35DB','10DB','10DC','10DD']);const isDIY=x=>x&&x.category==='Recipes';const orderCode=x=>isDIY(x)?String(x.orderHex||(/^0000[0-9A-F]{4}000016A2$/i.test(String(x.hex||''))?x.hex:'')):String(x.hex||'');const validItemCode=x=>isDIY(x)?/^0000[0-9A-F]{4}000016A2$/i.test(orderCode(x)): /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(orderCode(x));const disallowedOrderEntry=x=>!x||x.variantOrderSafe===false||x.recipeStatus==='blocked'||!validItemCode(x)||DISALLOWED_CODES.has(String(x.hex||'').toUpperCase())||['magic bag','communicator','communicator part'].includes(String(x.name||'').toLowerCase());if(!items.length){document.getElementById('summary').textContent='Catalog data could not load. Check that catalog-data.js is uploaded alongside index.html.';return;}const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));const addedStyles=document.createElement('style');addedStyles.textContent='\n.item.wishSelected{border-color:#8a44c1 !important;box-shadow:0 0 0 1px rgba(169,95,223,.55);}\n.item .art.picture{position:relative;overflow:hidden;}\n.wishAddedBadge{position:absolute;left:10px;top:10px;background:#159953;color:white;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800;letter-spacing:.09em;box-shadow:0 3px 8px #0004;z-index:2;white-space:nowrap}\n.wishQtyOverlay{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:5px;background:rgba(16,13,22,.90);border-radius:11px;padding:5px;color:#d9c2fc;z-index:2}\n.wishQtyOverlay button{border:0;background:#9632e0;color:#fff;border-radius:9px;min-width:35px;min-height:36px;font-size:25px;font-weight:700;line-height:1;cursor:pointer}\n.wishQtyOverlay [data-selected-minus]{background:#d31a85}\n.wishQtyOverlay output{min-width:20px;text-align:center;font-size:18px;font-weight:800}\n.wishQtyOverlay button:disabled{opacity:.4;cursor:not-allowed}\n.item .add[hidden]{display:none !important}\n';document.head.appendChild(addedStyles);
+addedStyles.textContent += "\n#grid,#pages,#pagesTop{overflow-anchor:none;}\n";
 
 // Restore the dark, neutral item-image trays regardless of the original
 // stylesheet's .art background. Avoid blend modes that turn image trays white.
@@ -169,23 +170,31 @@ function wishportQuantityNotice(item,previousCount,addedCount){
 
 function refreshPocketCardUI(){render();$('qty').textContent=pocket.length}
 function render(){const limit=pageSize,max=Math.max(1,Math.ceil(filtered.length/limit));page=Math.min(page,max-1);$('summary').textContent=filtered.length.toLocaleString()+' matching listings · '+items.length.toLocaleString()+' variation listings ('+(window.WISHPORT_BASE_ITEM_COUNT||items.length).toLocaleString()+' item names)';$('currentPage').textContent='Page '+(page+1)+' of '+max;const slice=filtered.slice(page*limit,(page+1)*limit);$('grid').innerHTML=slice.length?slice.map((x,i)=>{let key=x.name+'|'+x.category,on=fav.has(key),count=selectedCardCount(x),selected=count>0;return `<article class="item ${selected?'wishSelected':''}"><div class="art picture" role="img" aria-label="${esc(x.name)} item picture">${x.image?`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy" decoding="async" onerror="window.wishportImageError(this)"/>`: `<span class="noPhotoLabel">Image unavailable</span>`}${selected?`<span class="wishAddedBadge">✓ ADDED</span><div class="wishQtyOverlay"><button type="button" data-selected-minus="${i}" aria-label="Remove one ${esc(x.name)}">−</button><output aria-label="Selected quantity">${count}</output><button type="button" data-selected-plus="${i}" aria-label="Add another ${esc(x.name)}" ${pocket.length>=40?'disabled':''}>+</button></div>`:''}</div><h3>${esc(x.name)}</h3>${x.variationLabel?`<div class="variationCaption">${esc(x.variationLabel)}</div>`:''}<div class="meta">${esc(x.category)}${x.version?.startsWith('3.')?' · <span class="version">✨ 3.0</span>':''}${$('showVariants').checked&&x.variants?.length?' · '+x.variants.slice(0,3).map(esc).join(', ')+(x.variants.length>3?'…':''):''}${isDIY(x)?(x.recipeStatus==='blocked'?' · ⛔ Unavailable':' · 📜 DIY card (verify with bot)'):''}</div>${stackSize(x)&&!selected?`<div class="stackPicker"><span class="stackHint">Full stacks · ${stackSize(x)} per slot</span><div class="stackStepper"><button type="button" data-stack-minus="${i}" aria-label="Fewer stacks of ${esc(x.name)}" ${selectedStacks(x)===1?'disabled':''}>−</button><output aria-label="Number of stacks">${selectedStacks(x)}</output><button type="button" data-stack-plus="${i}" aria-label="More stacks of ${esc(x.name)}" ${selectedStacks(x)>=40?'disabled':''}>+</button><small>${selectedStacks(x)*stackSize(x)} pieces · ${selectedStacks(x)} slots</small></div></div>`:''}<div class="bottom"><button class="add" data-add="${i}" ${selected?'hidden':''} ${x.recipeStatus==='blocked'||x.variantOrderSafe===false?'disabled title="This listing requires verified metadata before ordering"':''}>${x.recipeStatus==='blocked'||x.variantOrderSafe===false?'Preview only':'+ Add item'}</button>${!x.variationLabel&&(x.variants?.length||x.patterns?.length)?`<button class="options" data-options="${i}" aria-label="Choose variation for ${esc(x.name)}">Options</button>`:""}<button class="fav ${on?'on':''}" data-fav="${i}" aria-label="Favorite ${esc(x.name)}">${on?'♥':'♡'}</button></div></article>`}).join(''):'<div class="empty">No matching items. Try a different search.</div>';$('pages').innerHTML=filtered.length>pageSize?`<button class="secondary" id="first" ${page===0?'disabled':''} aria-label="First page">«</button><button class="secondary" id="prev" ${page===0?'disabled':''} aria-label="Previous page">‹</button><span class="status">${page+1} / ${max}</span><button class="secondary" id="next" ${page+1>=max?'disabled':''} aria-label="Next page">›</button><button class="secondary" id="last" ${page+1>=max?'disabled':''} aria-label="Last page">»</button>`:'';$('pagesTop').innerHTML=$('pages').innerHTML.replace(/id="(first|prev|next|last)"/g,(_,id)=>'id="'+id+'Top"');
-// Keep the paging controls in the same screen position when changing pages.
-// This makes top controls stay at the top and bottom controls stay at the bottom.
+// Preserve the position of the clicked pagination bar, even on iOS Safari.
+// Adjust immediately after redraw (before browser scroll anchoring acts), then
+// correct again after the next layout. Do not scroll to the search bar.
 const turnCatalogPage=(toPage,fromTop)=>{
- const anchor=$(fromTop?'pagesTop':'pages');
- const oldY=anchor?.getBoundingClientRect().top??0;
+ const anchorId=fromTop?'pagesTop':'pages';
+ const oldAnchor=$(anchorId);
+ const before=oldAnchor?oldAnchor.getBoundingClientRect().top:0;
+ const beforeScroll=window.scrollY||document.documentElement.scrollTop||0;
  const maxPage=Math.max(0,Math.ceil(filtered.length/pageSize)-1);
- page=Math.max(0,Math.min(maxPage,toPage));
+ const next=Math.max(0,Math.min(maxPage,toPage));
+ if(next===page)return;
+ page=next;
  render();
- // Wait for layout after replacing the catalog cards; adjust scroll to keep
- // the same controls visible instead of jumping the customer to Search.
- requestAnimationFrame(()=>{
-  const updated=$(fromTop?'pagesTop':'pages');
-  if(updated){
-   const delta=updated.getBoundingClientRect().top-oldY;
-   if(Math.abs(delta)>1)window.scrollBy({top:delta,left:0,behavior:'instant'});
+ const restore=()=>{
+  const bar=$(anchorId);
+  if(!bar)return;
+  const offset=bar.getBoundingClientRect().top-before;
+  if(Number.isFinite(offset)&&Math.abs(offset)>1){
+   window.scrollTo(0,Math.max(0,(window.scrollY||document.documentElement.scrollTop||0)+offset));
   }
- });
+ };
+ // iOS Safari sometimes changes the scroll position when a large item grid is replaced.
+ // Restore immediately and once after layout settles.
+ restore();
+ requestAnimationFrame(()=>{restore();requestAnimationFrame(restore)});
 };
 const bindTop=(id,toPage)=>{const b=$(id+'Top');if(b)b.onclick=()=>turnCatalogPage(toPage(),true)};
 bindTop('first',()=>0);bindTop('prev',()=>Math.max(0,page-1));bindTop('next',()=>Math.min(max-1,page+1));bindTop('last',()=>max-1);
