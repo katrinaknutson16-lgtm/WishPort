@@ -16,7 +16,13 @@
 .dockInner { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 #pocketFull:empty { display: none; }
 #pocketFull { flex: 1 1 auto; font-weight: 700; }
-</style><style>.giftPicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}.giftPicker select{min-height:44px;max-width:100%}</style></head><body><header><div class="inner"><h1>🌙 WishPort</h1><p>Your pocketful of magic · ACNH Order Builder</p><span class="releaseTag">✨ Expanded variation catalog · Nov 11</span><span class="heroTag">💜 Browse, filter and order · 40-slot pocket · $order</span></div></header><main>
+</style><style>.giftPicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}.giftPicker select{min-height:44px;max-width:100%}</style><style>
+.plotItem {display:grid;grid-template-columns:1fr 44px 2ch 44px;align-items:center;gap:.45rem;margin:.3rem 0}
+.plotItem button {min-height:44px;border-radius:12px;font-size:1.1rem}
+.plotItem output {text-align:center}
+.plotItems {margin:1rem 0}
+</style>
+</head><body><header><div class="inner"><h1>🌙 WishPort</h1><p>Your pocketful of magic · ACNH Order Builder</p><span class="releaseTag">✨ Expanded variation catalog · Nov 11</span><span class="heroTag">💜 Browse, filter and order · 40-slot pocket · $order</span></div></header><main>
 <section class="panel wpWelcome" aria-label="Welcome to WishPort">
   <strong>💜 Welcome to WishPort!</strong>
   <p>Find your favorite ACNH items, build a pocket of up to 40 items, and copy your order to Discord.</p>
@@ -113,7 +119,7 @@
   <div class="browseJump"><label>Jump to page <input type="number" inputmode="numeric" id="jumpPage" value="1" min="1" /></label><button id="goPage" class="cta" type="button">Go</button><label>Items per page <select id="pageSize"><option value="25">25 items</option><option value="50" selected>50 items</option><option value="100">100 items</option></select></label></div>
   <section class="panel status" style="margin-top:15px"><strong>Order safety:</strong> WishPort checks item codes, but the Discord bot makes the final safety decision. Do not bypass blocked-item warnings. More details are in Help &amp; FAQ.</section>
 </section>
-<section id="plotsPanel" class="browsePanel" hidden><div class="sectionIntro"><h2>🏡 Starter Plot Furniture</h2><p>Match each selection to your plot sign, then add the six finished items to your pocket.</p></div>
+<section id="plotsPanel" class="browsePanel" hidden><div class="sectionIntro"><h2>🏡 Starter Plot Furniture</h2><p>Match each selection to your plot sign, then use + or − for individual items or add all six together.</p></div>
 <form class="orderToolbox starterPlot" data-fixed="pot"><h3>Plot 1</h3><p>Interior · pot</p>
 <p><label>Native fruit<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
 <option value="apple chair|juicy-apple tv">apple chair, juicy-apple TV</option>
@@ -126,6 +132,7 @@
 <option value="stone stool|stone table|clothesline">stone stool, stone table, clothesline</option>
 <option value="hay bed|swinging bench|barrel">hay bed, swinging bench, barrel</option>
 </select></label></p>
+<div class="plotItems"></div>
 <button class="cta" type="submit">Add Plot 1 · 6 items</button><p role="status"></p></form>
 <form class="orderToolbox starterPlot" data-fixed="wooden-block stereo|wooden-block table"><h3>Plot 2</h3><p>Interior · wooden-block stereo, wooden-block table</p>
 <p><label>Native flower wreath<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
@@ -142,12 +149,14 @@
 <option value="natural garden chair|natural garden table|birdbath">natural garden chair, natural garden table, birdbath</option>
 <option value="iron garden chair|iron garden table|birdhouse">iron garden chair, iron garden table, birdhouse</option>
 </select></label></p>
+<div class="plotItems"></div>
 <button class="cta" type="submit">Add Plot 2 · 6 items</button><p role="status"></p></form>
 <form class="orderToolbox starterPlot" data-fixed="wooden simple bed|wooden chair|classic pitcher"><h3>Plot 3</h3><p>Interior · wooden simple bed, wooden chair, classic pitcher</p>
 <p><label>Exterior furniture<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
 <option value="log garden lounge|log stool|water pump">log garden lounge, log stool, water pump</option>
 <option value="log dining table|log bench|wooden bucket">log dining table, log bench, wooden bucket</option>
 </select></label></p>
+<div class="plotItems"></div>
 <button class="cta" type="submit">Add Plot 3 · 6 items</button><p role="status"></p></form>
 </section>
 <section id="collectionsPanel" class="browsePanel" hidden>
@@ -193,7 +202,7 @@
 <script src="catalog-expansion.js?v=20261111-variations-v1"></script>
 <script src="collection-presets.js?v=20261111-realroom-v1"></script>
 <script src="catalog-reference.js?v=20261113"></script>
-<script src="app-wishport-20261113.js?v=starter-plots-v1"></script>
+<script src="app-wishport-20261113.js?v=starter-plots-individual-v1"></script>
 <style>
   button { touch-action: manipulation; }
   @media (pointer: coarse) {

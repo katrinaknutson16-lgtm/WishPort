@@ -305,15 +305,54 @@ $('search').oninput=()=>{page=0;apply()};$('category').onchange=()=>{
  page=0;apply();
 };$('version').onchange=()=>{page=0;apply()};$('sort').onchange=()=>{page=0;apply()};
 // New catalog sections: Database, Collections and Categories.
-for (const form of document.querySelectorAll('.starterPlot')) {
+const plotForms = document.querySelectorAll('.starterPlot');
+function plotFurniture(form) {
+ const groups = [form.dataset.fixed, ...Array.from(form.querySelectorAll('select'), select => select.value)];
+ return groups.filter(Boolean).flatMap(group => group.split('|')).map(name =>
+  items.find(item => item.name.toLowerCase() === name && !isDIY(item) &&
+   validItemCode(item) && !disallowedOrderEntry(item)));
+}
+function refreshPlotItems(form) {
+ const list = form.querySelector('.plotItems');
+ list.innerHTML = plotFurniture(form).map((item, index) => {
+  if (!item) return '<p>Item unavailable</p>';
+  const count = selectedCardCount(item);
+  const name = esc(item.name);
+  return `<div class="plotItem"><span>${name}</span>
+   <button type="button" data-change="-1" data-index="${index}" aria-label="Remove one ${name}" ${count ? '' : 'disabled'}>−</button>
+   <output aria-label="${name} in pocket">${count}</output>
+   <button type="button" data-change="1" data-index="${index}" aria-label="Add one ${name}" ${pocket.length >= 40 ? 'disabled' : ''}>+</button></div>`;
+ }).join('');
+}
+for (const form of plotForms) {
+ form.addEventListener('change', () => {
+  form.querySelector('[role="status"]').textContent = '';
+  refreshPlotItems(form);
+ });
+ form.addEventListener('click', event => {
+  const button = event.target.closest('[data-change]');
+  if (!button) return;
+  const item = plotFurniture(form)[Number(button.dataset.index)];
+  if (!item) return;
+  if (button.dataset.change === '1') {
+   if (!addDirectOne(item)) return;
+  } else {
+   const index = pocket.findIndex(entry => selectedCardMatch(entry, item));
+   if (index < 0) return;
+   pocket.splice(index, 1);
+  }
+  savePocket();
+  refreshPocketCardUI();
+  plotForms.forEach(refreshPlotItems);
+  const replacement = form.querySelector(`[data-index="${button.dataset.index}"][data-change="${button.dataset.change}"]`);
+  if (replacement && !replacement.disabled) replacement.focus({preventScroll:true});
+  form.querySelector('[role="status"]').textContent = item.name + ' in pocket: ' + selectedCardCount(item);
+ });
  form.addEventListener('submit', event => {
   event.preventDefault();
   const status = form.querySelector('[role="status"]');
-  const groups = [form.dataset.fixed, ...Array.from(form.querySelectorAll('select'), select => select.value)];
-  const furniture = groups.flatMap(group => group.split('|')).map(name =>
-   items.find(item => item.name.toLowerCase() === name && !isDIY(item) &&
-    validItemCode(item) && !disallowedOrderEntry(item)));
-  if (furniture.some(item => !item)) {
+  const furniture = plotFurniture(form);
+  if (furniture.length !== 6 || furniture.some(item => !item)) {
    status.textContent = 'One of these items is unavailable. Please check the catalog.';
    return;
   }
@@ -324,11 +363,12 @@ for (const form of document.querySelectorAll('.starterPlot')) {
   furniture.forEach(addDirectOne);
   savePocket();
   refreshPocketCardUI();
+  plotForms.forEach(refreshPlotItems);
   status.textContent = 'Added all six items. Your pocket has ' + pocket.length + '/40 items.';
  });
 }
 const tabs=document.querySelectorAll('[data-tab]');
-function activateTab(tab){if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers','plots'].forEach(name=>$(name+'Panel').hidden=name!==tab);}
+function activateTab(tab){if(tab==='plots')plotForms.forEach(refreshPlotItems);if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers','plots'].forEach(name=>$(name+'Panel').hidden=name!==tab);}
 tabs.forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 const catCounts=new Map();items.forEach(x=>catCounts.set(categoryFor(x),(catCounts.get(categoryFor(x))||0)+1));
 $('categoryGrid').innerHTML=[...catCounts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([c,n])=>`<button class="categoryTile" data-cat="${esc(c)}"><span class="categorySymbol" aria-hidden="true">${esc(c.slice(0,1).toUpperCase())}</span><span class="categoryLabel">${esc(c)}</span><span class="categoryCount">${n.toLocaleString()} items</span></button>`).join('');
