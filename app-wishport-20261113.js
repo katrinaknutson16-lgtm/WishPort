@@ -305,8 +305,30 @@ $('search').oninput=()=>{page=0;apply()};$('category').onchange=()=>{
  page=0;apply();
 };$('version').onchange=()=>{page=0;apply()};$('sort').onchange=()=>{page=0;apply()};
 // New catalog sections: Database, Collections and Categories.
+for (const form of document.querySelectorAll('.starterPlot')) {
+ form.addEventListener('submit', event => {
+  event.preventDefault();
+  const status = form.querySelector('[role="status"]');
+  const groups = [form.dataset.fixed, ...Array.from(form.querySelectorAll('select'), select => select.value)];
+  const furniture = groups.flatMap(group => group.split('|')).map(name =>
+   items.find(item => item.name.toLowerCase() === name && !isDIY(item) &&
+    validItemCode(item) && !disallowedOrderEntry(item)));
+  if (furniture.some(item => !item)) {
+   status.textContent = 'One of these items is unavailable. Please check the catalog.';
+   return;
+  }
+  if (pocket.length + furniture.length > 40) {
+   status.textContent = 'This plot needs six free pocket slots. You have ' + (40 - pocket.length) + '.';
+   return;
+  }
+  furniture.forEach(addDirectOne);
+  savePocket();
+  refreshPocketCardUI();
+  status.textContent = 'Added all six items. Your pocket has ' + pocket.length + '/40 items.';
+ });
+}
 const tabs=document.querySelectorAll('[data-tab]');
-function activateTab(tab){if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers'].forEach(name=>$(name+'Panel').hidden=name!==tab);}
+function activateTab(tab){if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers','plots'].forEach(name=>$(name+'Panel').hidden=name!==tab);}
 tabs.forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 const catCounts=new Map();items.forEach(x=>catCounts.set(categoryFor(x),(catCounts.get(categoryFor(x))||0)+1));
 $('categoryGrid').innerHTML=[...catCounts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([c,n])=>`<button class="categoryTile" data-cat="${esc(c)}"><span class="categorySymbol" aria-hidden="true">${esc(c.slice(0,1).toUpperCase())}</span><span class="categoryLabel">${esc(c)}</span><span class="categoryCount">${n.toLocaleString()} items</span></button>`).join('');
