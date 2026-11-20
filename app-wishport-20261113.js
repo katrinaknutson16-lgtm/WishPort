@@ -101,6 +101,7 @@ function categoryFor(item) {
  if (cropStarts.has(name) || name.startsWith('ripe ')) return 'Veggies';
  if (/ (bush|start)$/.test(name)) return 'Bushes';
  if (/tree$| young |^nursery |sapling$|^bamboo shoot$/.test(name)) return 'Trees';
+ if (/ (bag|plant)$/.test(name)) return 'Flowers';
  return category;
 }
 for(const [id,key,all] of [['themeSelect','theme','All Themes'],['seriesSelect','series','All Series'],['interactionSelect','interaction','All Interactions'],['colorSelect','color','All Colours']]){
@@ -113,28 +114,8 @@ const cats=[...new Set(items.map(categoryFor))].sort((a,b)=>a.localeCompare(b));
 $('category').innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
 $('pills').innerHTML=['All items','🪵 Materials','📜 DIY Recipes','3.0 items','Furniture','Clothing','Favorites'].map((x,i)=>`<button class="pill ${i===0?'active':''}" data-pill="${i}">${x}</button>`).join('');let quick='all';
 $('pills').onclick=e=>{let b=e.target.closest('[data-pill]');if(!b)return;quick=['all','materials','diy','3','furniture','clothing','favorites'][+b.dataset.pill];$('pills').querySelectorAll('.pill').forEach(x=>x.classList.toggle('active',x===b));$('category').value='';$('version').value='';page=0;apply();};
-function plantGroup(item) {
- const category = categoryFor(item);
- if (category !== 'Plants' && category !== 'Seeds and Starts') return '';
- const name = item.name.toLowerCase();
- if (/ (bag|plant)$/.test(name)) return 'Flowers';
- return 'Other plants';
-}
-const plantField = document.createElement('label');
-plantField.className = 'explorerFilterField';
-plantField.innerHTML = '<span>Plant type</span><select aria-label="Plant type"><option value="">All Plants</option><option>Flowers</option></select>';
-plantField.style.display = 'none';
-$('category').closest('label').after(plantField);
-const plantSelect = plantField.querySelector('select');
-plantSelect.onchange = () => { page = 0; apply(); };
 function apply(){const q=$('search').value.trim().toLowerCase(),cat=$('category').value,v=$('version').value;
- const browsingPlants = cat === 'Plants';
- plantField.style.display = browsingPlants ? '' : 'none';
- if (!browsingPlants) plantSelect.value = '';
- filtered=items.filter(x=>{if(q&&!(x.name.toLowerCase().includes(q)||categoryFor(x).toLowerCase().includes(q)||x.variationLabel.toLowerCase().includes(q)))return false;if(cat&&cat.startsWith('group:')){const group=cat.slice(6);if(group==='Materials'&&categoryFor(x)!=='Materials')return false;if(group==='DIY Recipes'&&x.category!=='Recipes')return false;if(group==='Furniture'&&!['Housewares','Miscellaneous','Wall-mounted','Ceiling Decor'].includes(x.category))return false;if(group==='Clothing'&&!['Tops','Bottoms','Dress-Up','Headwear','Shoes','Socks','Accessories','Bags','Clothing Other'].includes(x.category))return false;if(group==='3.0 items'&&x.version!=='3.0.0')return false;if(group==='Favorites'&&!fav.has(x.name+'|'+x.category))return false;}else if(browsingPlants){
-  const group = plantGroup(x);
-  if (!group || (plantSelect.value && plantSelect.value !== group)) return false;
- }else if(cat&&categoryFor(x)!==cat)return false;if(v&&x.version!==v)return false;if(quick==='materials'&&categoryFor(x)!=='Materials')return false;if(quick==='3'&&x.version!=='3.0.0')return false;if(quick==='furniture'&&!['Housewares','Miscellaneous','Wall-mounted','Ceiling Decor'].includes(x.category))return false;if(quick==='clothing'&&!['Tops','Bottoms','Dress-Up','Headwear','Shoes','Socks','Accessories','Bags','Clothing Other'].includes(x.category))return false;if(quick==='diy'&&x.category!=='Recipes')return false;if(quick==='favorites'&&!fav.has(x.name+'|'+x.category))return false;if(!hasFilter(filterData(x).t,$('themeSelect').value))return false;if(!hasFilter(filterData(x).s,$('seriesSelect').value))return false;if(!hasFilter(filterData(x).i,$('interactionSelect').value))return false;if(!hasFilter(filterData(x).c,$('colorSelect').value))return false;return true});if($('hideVariants')?.checked){const seen=new Set();filtered=filtered.filter(x=>{const key=x.name+'|'+categoryFor(x);if(seen.has(key))return false;seen.add(key);return true;});}const sort=$('sort').value;
+ filtered=items.filter(x=>{if(q&&!(x.name.toLowerCase().includes(q)||categoryFor(x).toLowerCase().includes(q)||x.variationLabel.toLowerCase().includes(q)))return false;if(cat&&cat.startsWith('group:')){const group=cat.slice(6);if(group==='Materials'&&categoryFor(x)!=='Materials')return false;if(group==='DIY Recipes'&&x.category!=='Recipes')return false;if(group==='Furniture'&&!['Housewares','Miscellaneous','Wall-mounted','Ceiling Decor'].includes(x.category))return false;if(group==='Clothing'&&!['Tops','Bottoms','Dress-Up','Headwear','Shoes','Socks','Accessories','Bags','Clothing Other'].includes(x.category))return false;if(group==='3.0 items'&&x.version!=='3.0.0')return false;if(group==='Favorites'&&!fav.has(x.name+'|'+x.category))return false;}else if(cat&&categoryFor(x)!==cat)return false;if(v&&x.version!==v)return false;if(quick==='materials'&&categoryFor(x)!=='Materials')return false;if(quick==='3'&&x.version!=='3.0.0')return false;if(quick==='furniture'&&!['Housewares','Miscellaneous','Wall-mounted','Ceiling Decor'].includes(x.category))return false;if(quick==='clothing'&&!['Tops','Bottoms','Dress-Up','Headwear','Shoes','Socks','Accessories','Bags','Clothing Other'].includes(x.category))return false;if(quick==='diy'&&x.category!=='Recipes')return false;if(quick==='favorites'&&!fav.has(x.name+'|'+x.category))return false;if(!hasFilter(filterData(x).t,$('themeSelect').value))return false;if(!hasFilter(filterData(x).s,$('seriesSelect').value))return false;if(!hasFilter(filterData(x).i,$('interactionSelect').value))return false;if(!hasFilter(filterData(x).c,$('colorSelect').value))return false;return true});if($('hideVariants')?.checked){const seen=new Set();filtered=filtered.filter(x=>{const key=x.name+'|'+categoryFor(x);if(seen.has(key))return false;seen.add(key);return true;});}const sort=$('sort').value;
  if(sort!=='default'){
   filtered.sort((a,b)=>sort==='za'?b.name.localeCompare(a.name):a.name.localeCompare(b.name)||a.variationLabel.localeCompare(b.variationLabel));
  }render()}
