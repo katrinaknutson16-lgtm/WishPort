@@ -92,7 +92,9 @@ const filterOpts=filterCatalog.options||{};
 const filterKey=x=>String(x.name||'').toLowerCase()+'|'+String(x.category||'').toLowerCase();
 const filterData=x=>{const b=filterCatalog.base?.[filterKey(x)]||{};const v=filterCatalog.variations?.[filterKey(x)+'|'+String(x.variationPreset||'').toLowerCase()]||{};return {g:b.g||[],t:v.t||b.t||[],s:v.s||b.s||[],i:v.i||b.i||[],c:x.variationPreset?(v.c||[]):(b.c||[])}};
 const hasFilter=(arr,v)=>!v||(arr||[]).some(s=>String(s).toLowerCase()===String(v).toLowerCase());
-const categoryFor=x=>x.browseCategory;
+const cropStarts = new Set(['carrot start', 'seed potato', 'pumpkin start', 'sugarcane start', 'tomato start', 'wheat start']);
+const categoryFor = item => item.browseCategory === 'Seeds and Starts' && cropStarts.has(item.name.toLowerCase())
+ ? 'Veggies' : item.browseCategory;
 for(const [id,key,all] of [['themeSelect','theme','All Themes'],['seriesSelect','series','All Series'],['interactionSelect','interaction','All Interactions'],['colorSelect','color','All Colours']]){
  $(id).innerHTML='<option value="">'+all+'</option>'+(filterOpts[key]||[]).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
 }
@@ -107,7 +109,7 @@ function plantGroup(item) {
  const category = categoryFor(item);
  if (category !== 'Plants' && category !== 'Seeds and Starts') return '';
  const name = item.name.toLowerCase();
- if (/^ripe |^(carrot|pumpkin|sugarcane|tomato|wheat) start$|^seed potato$/.test(name)) return 'Veggies';
+ if (/^ripe /.test(name)) return 'Veggies';
  if (/ (bush|start)$/.test(name)) return 'Bushes';
  if (/tree$| young |^nursery |sapling$|^bamboo shoot$/.test(name)) return 'Trees';
  if (/ (bag|plant)$/.test(name)) return 'Flowers';
