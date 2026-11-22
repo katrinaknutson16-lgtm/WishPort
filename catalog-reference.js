@@ -26532,3 +26532,31 @@ window.WISHPORT_REFERENCE_ROWS = [
 ["100 turnips","","Other","0A51","https://www.pange.ca/itemsearch/items/img/Kabu_100.png"],
 ["leaf statue","","Housewares","052B","https://www.pange.ca/itemsearch/items/img/FTRLeaf_Statue_NH.png"]
 ];
+
+// Museum sculptures and forgeries from the ACNH Data Spreadsheet.
+window.WISHPORT_REFERENCE_ROWS.push(
+  ["ancient statue","Genuine","Artwork","0539","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDoguu.png"],
+  ["ancient statue (fake)","Fake","Artwork","053A","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDoguuFake.png"],
+  ["beautiful statue","Genuine","Artwork","053D","https://acnhcdn.com/latest/FtrIcon/FtrSculptureMilo.png"],
+  ["beautiful statue (fake)","Fake","Artwork","053E","https://acnhcdn.com/latest/FtrIcon/FtrSculptureMiloFake.png"],
+  ["familiar statue","Genuine","Artwork","30FD","https://acnhcdn.com/latest/FtrIcon/FtrSculptureThinker.png"],
+  ["gallant statue","Genuine","Artwork","0535","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDavid.png"],
+  ["gallant statue (fake)","Fake","Artwork","0536","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDavidFake.png"],
+  ["great statue","Genuine","Artwork","053B","https://acnhcdn.com/latest/FtrIcon/FtrSculptureKamehameha.png"],
+  ["informative statue","Genuine","Artwork","30F7","https://acnhcdn.com/latest/FtrIcon/FtrSculptureRosettaStone.png"],
+  ["informative statue (fake)","Fake","Artwork","30F8","https://acnhcdn.com/latest/FtrIcon/FtrSculptureRosettaStoneFake.png"],
+  ["motherly statue","Genuine","Artwork","0533","https://acnhcdn.com/latest/FtrIcon/FtrSculptureCapitolini.png"],
+  ["motherly statue (fake)","Fake","Artwork","0534","https://acnhcdn.com/latest/FtrIcon/FtrSculptureCapitoliniFake.png"],
+  ["mystic statue","Genuine","Artwork","053F","https://acnhcdn.com/latest/FtrIcon/FtrSculptureNefertiti.png"],
+  ["mystic statue (fake)","Fake","Artwork","0540","https://acnhcdn.com/latest/FtrIcon/FtrSculptureNefertitiFake.png"],
+  ["robust statue","Genuine","Artwork","0537","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDiskobolos.png"],
+  ["robust statue (fake)","Fake","Artwork","0538","https://acnhcdn.com/latest/FtrIcon/FtrSculptureDiskobolosFake.png"],
+  ["rock-head statue","Genuine","Artwork","30F5","https://acnhcdn.com/latest/FtrIcon/FtrSculptureOlmecaHead.png"],
+  ["rock-head statue (fake)","Fake","Artwork","30F6","https://acnhcdn.com/latest/FtrIcon/FtrSculptureOlmecaHeadFake.png"],
+  ["tremendous statue","Genuine","Artwork","30F9","https://acnhcdn.com/latest/FtrIcon/FtrSculptureHoumuwuDing.png"],
+  ["tremendous statue (fake)","Fake","Artwork","30FA","https://acnhcdn.com/latest/FtrIcon/FtrSculptureHoumuwuDingFake.png"],
+  ["valiant statue","Genuine","Artwork","0541","https://acnhcdn.com/latest/FtrIcon/FtrSculptureSamothrace.png"],
+  ["valiant statue (fake)","Fake","Artwork","0542","https://acnhcdn.com/latest/FtrIcon/FtrSculptureSamothraceFake.png"],
+  ["warrior statue","Genuine","Artwork","30FB","https://acnhcdn.com/latest/FtrIcon/FtrSculptureHeibayo.png"],
+  ["warrior statue (fake)","Fake","Artwork","30FC","https://acnhcdn.com/latest/FtrIcon/FtrSculptureHeibayoFake.png"]
+);
