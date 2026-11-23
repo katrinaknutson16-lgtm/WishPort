@@ -436,25 +436,30 @@ for (const it of legacyItems){
  const codes=[it.hex,it.orderHex,...Object.values(it.variantHex||{})];
  for(const code of codes){if(code && !catalogByID.has(String(code).toUpperCase()))catalogByID.set(String(code).toUpperCase(),it)}
 }
-const themeItemsByCode = new Map(items.filter(item => !isDIY(item)).map(item => [orderCode(item).padStart(16,'0'), item]));
-const collections=presetRows.map((p,id)=>({
- id,name:p.name,cover:p.cover,group:p.group,description:'Curated ACNH room preset',
- items:p.codes.map(hex=>{
-  if(p.group){
-   const item=themeItemsByCode.get(hex);
-   return {...item,hex,variation:item.variationLabel};
-  }
+const catalogByName = new Map();
+for(const item of items){
+ if(disallowedOrderEntry(item))continue;
+ const key=item.name.toLowerCase();
+ if(!catalogByName.has(key))catalogByName.set(key,[]);
+ catalogByName.get(key).push(item);
+}
+const collections=presetRows.map((p,id)=>{
+ if(p.group){
+  const entries=(p.catalogNames||[]).flatMap(name=>catalogByName.get(name)||[]);
+  return {id,name:p.name,group:p.group,items:entries,coverItems:p.codes.slice(0,4).map(code=>entries.find(x=>orderCode(x).padStart(16,'0')===code)).filter(Boolean)};
+ }
+ return {id,name:p.name,cover:p.cover,items:p.codes.map(hex=>{
   const original=catalogByID.get(hex)||catalogByID.get(hex.slice(-4));
   return {name:original?.name||'ACNH item #'+hex.slice(-4),category:original?.category||'',image:original?.image||'',hex,variation:original?.variationPreset||'',pattern:original?.patternPreset||''};
- })
-}));
+ })};
+});
 function coverMarkup(c){
- if(c.group) return '<div class="themeCover">'+c.items.slice(0,4).map(x=>`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="${esc(x.name)}" loading="lazy">`).join('')+'</div>';
+ if(c.group) return '<div class="themeCover">'+c.coverItems.map(x=>`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="${esc(x.name)}" loading="lazy">`).join('')+'</div>';
  return `<div class="collectionCover realRoomCover"><img src="${esc(c.cover)}" loading="lazy" alt="Actual Animal Crossing New Horizons room preview: ${esc(c.name)}"><span class="roomPreviewBadge">ACTUAL ACNH ROOM</span></div>`;}
 function renderCollections(){
  const q=$('collectionSearch').value.trim().toLowerCase();
  const found=collections.filter(x=>(x.name+' '+(x.group||'')).toLowerCase().includes(q));
- $('collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.group||'Original curated ACNH room collection')}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ITEMS</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div><button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button></div></article>`).join(''):'<p class="empty">No matching collections.</p>';
+ $('collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.group||'Original curated ACNH room collection')}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ${c.group?"ENTRIES":"ITEMS"}</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div>${c.group?'':`<button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button>`}</div></article>`).join(''):'<p class="empty">No matching collections.</p>';
 }
 let selectedCollection=null;
 function addPreset(c){
@@ -474,12 +479,43 @@ $('collectionsGrid').onclick=e=>{
  selectedCollection=collections[+b.dataset.collection];
  $('collectionTitle').textContent=selectedCollection.name;
  $('collectionDescription').textContent=selectedCollection.group||'Original ACNH room photo · original provided order codes';
- $('collectionPreview').innerHTML=selectedCollection.items.map((x,i)=>`<div class="presetItem"><span>${i+1}.</span>${x.image?`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="" loading="lazy">`:''}<span>${esc(x.name)}</span>${selectedCollection.group?`<button type="button" class="secondary" data-theme-item="${i}" aria-label="Add ${esc(x.name)}">Add</button>`:`<code>${esc(x.hex)}</code>`}</div>`).join('');
- $('addCollection').textContent='Add collection';show('collectionModal');
+ const theme=!!selectedCollection.group;
+ $('themeTools').hidden=!theme;
+ $('addCollection').hidden=theme;
+ $('themeQuery').value='';
+ $('themePageNav').hidden=!theme;
+ themePage=0;
+ renderCollectionItems();
+ show('collectionModal');
 };
+let themePage=0;
+let visibleThemeItems=[];
+const themePageSize=30;
+function renderCollectionItems(){
+ const theme=!!selectedCollection.group;
+ const q=$('themeQuery').value.trim().toLowerCase();
+ visibleThemeItems=theme?selectedCollection.items.filter(x=>[x.name,x.variationLabel,isDIY(x)?'DIY recipe':categoryFor(x)].join(' ').toLowerCase().includes(q)):selectedCollection.items;
+ const pages=Math.max(1,Math.ceil(visibleThemeItems.length/themePageSize));
+ themePage=Math.min(themePage,pages-1);
+ const start=theme?themePage*themePageSize:0;
+ const pageItems=theme?visibleThemeItems.slice(start,start+themePageSize):visibleThemeItems;
+ $('themePrev').disabled=themePage===0;
+ $('themeNext').disabled=themePage+1>=pages;
+ $('themePageInfo').textContent='Page '+(themePage+1)+' of '+pages+' · '+visibleThemeItems.length+' entries';
+ $('themePocket').textContent=pocket.length+' / 40 slots used';
+ $('collectionPreview').innerHTML=pageItems.map((x,i)=>{
+  const label=theme?[x.name,isDIY(x)?'DIY recipe':x.variationLabel].filter(Boolean).join(' · '):x.name;
+  return `<div class="presetItem"><span>${start+i+1}.</span>${x.image?`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="" loading="lazy">`:''}<span>${esc(label)}</span>${theme?`<button type="button" class="secondary" data-theme-item="${start+i}" aria-label="Add ${esc(label)}">Add</button>`:`<code>${esc(x.hex)}</code>`}</div>`;
+ }).join('')||'<p>No matching items.</p>';
+}
+$('themeQuery').oninput=()=>{themePage=0;renderCollectionItems();};
+$('themePrev').onclick=()=>{--themePage;renderCollectionItems();};
+$('themeNext').onclick=()=>{++themePage;renderCollectionItems();};
 $('collectionPreview').onclick=e=>{
- const button=e.target.closest('[data-theme-item]');
- if(button && selectedCollection?.group) addDirect(selectedCollection.items[Number(button.dataset.themeItem)],button);
+ const b=e.target.closest('[data-theme-item]');
+ if(!b||!selectedCollection?.group)return;
+ addDirect(visibleThemeItems[Number(b.dataset.themeItem)],b);
+ $('themePocket').textContent=pocket.length+' / 40 slots used';
 };
 $('collectionSearch').oninput=renderCollections;
 $('addCollection').onclick=()=>addPreset(selectedCollection);
