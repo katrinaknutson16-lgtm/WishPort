@@ -39,6 +39,7 @@ const categoryIcon=c=>/housewares|miscellaneous|interior|wall-mounted|ceiling/i.
 // Full-stack controls are offered only for names with documented pocket stack limits.
 // Each selection still uses ONE item ID in the Discord command per inventory slot.
 const stackLimits=Object.freeze({
+ 'round mushroom':10,'flat mushroom':10,'skinny mushroom':10,'elegant mushroom':10,'rare mushroom':10,
  'wood':30,'softwood':30,'hardwood':30,'iron nugget':30,'gold nugget':30,'clay':30,'stone':30,
  'bamboo piece':30,'young spring bamboo':30,'tree branch':30,'acorn':30,'pine cone':30,
  'pearl':30,'vine':30,'glowing moss':30,'nook miles ticket':10,'fish bait':10,
@@ -229,7 +230,7 @@ function show(id){if(id==='cartModal'){const cart=$('cartModal');cart.hidden=fal
 function hide(id){if(id==='cartModal'){const cart=$('cartModal');cart.hidden=true;document.querySelector('main').hidden=false;document.querySelector('.dock').hidden=false;return;}$(id).classList.remove('show')};document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>hide(b.dataset.close));['modal','cartModal'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))hide(id)}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){hide('modal');hide('cartModal')}});
 const savePocket=()=>{try{localStorage.setItem('wishport_pocket',JSON.stringify(pocket))}catch(e){}};
 const lookupItem=x=>items.find(it=>orderCode(it)===x.hex&&it.name===x.name&&it.category===x.category)||legacyItems.find(it=>it.name===x.name&&(it.category===x.category||!x.category)&&(!x.variation||it.variationPreset===x.variation)&&(!x.pattern||it.patternPreset===x.pattern))||items.find(it=>it.name===x.name&&(it.category===x.category||!x.category));
-const codeFor=x=>{const own=String(x?.hex||'').toUpperCase();if(supportedItemCode(x,own))return own;const entry=lookupItem(x);const v=x?.variation||'',p=x?.pattern||'';if(isDIY(entry||x))return String(entry?.orderHex||'').toUpperCase();if(v||p){const verified=entry?.variantHex?.[v+'|'+p]||entry?.variantHex?.[v+'|']||'';return /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(verified)?String(verified).toUpperCase():'';}return String(entry?.hex||'').toUpperCase();};
+const codeFor=x=>{const own=String(x?.hex||'').toUpperCase();if(x?.stackSize===10 && /^0CC[C-F]$|^0CD0$/.test(own))return '000000090000'+own;if(supportedItemCode(x,own))return own;const entry=lookupItem(x);const v=x?.variation||'',p=x?.pattern||'';if(isDIY(entry||x))return String(entry?.orderHex||'').toUpperCase();if(v||p){const verified=entry?.variantHex?.[v+'|'+p]||entry?.variantHex?.[v+'|']||'';return /^(?:[0-9A-F]{4}|[0-9A-F]{16})$/i.test(verified)?String(verified).toUpperCase():'';}return String(entry?.hex||'').toUpperCase();};
 // Diagnostic only: never weakens the existing disallowedOrderEntry/makeCodes safety checks.
 const issueForItem=x=>{
  if(!x)return 'Missing item information';
