@@ -1,0 +1,215 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#7552ae"><title>WishPort | Your Pocketful of Magic</title><meta name="description" content="WishPort Animal Crossing New Horizons item order builder. Browse thousands of items, create a 40-slot pocket, and copy your $order command.">
+<link rel="stylesheet" href="style.css?v=20261111-help-v1"><link rel="stylesheet" href="order-layout.css?v=20261111-pocket-v1"><style>
+/* WishPort stable catalog cards: dark mode matching the restored site; no blending filters. */
+#databasePanel .grid .item{background:#211f25!important;border:1px solid #45374e!important;color:#cfc2dd!important;box-shadow:none!important}
+#databasePanel .grid .item h3{color:#cfc2dd!important}
+#databasePanel .grid .item .meta{color:#a99bb5!important}
+#databasePanel .grid .item .art.picture{background:#29262f!important;overflow:hidden}
+#databasePanel .grid .item .art.picture img{mix-blend-mode:normal!important;filter:none!important}
+#databasePanel .grid .item .fav{background:#242129!important;border-color:#493a56!important;color:#b88fc3!important}
+#databasePanel .grid .item .add{background:#9670c9!important;color:#241830!important}
+#databasePanel .grid .item .options{background:#302738!important;color:#d3b8f3!important;border-color:#624c78!important}
+</style><style>
+.itemDetails summary { cursor: pointer; padding: 6px 0; font-size: .875rem; }
+.itemDetails .meta { margin: 0 0 8px; overflow-wrap: anywhere; }
+#openCart { min-height: 44px; }
+.dockInner { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+#pocketFull:empty { display: none; }
+#pocketFull { flex: 1 1 auto; font-weight: 700; }
+</style><style>.giftPicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}.giftPicker select{min-height:44px;max-width:100%}</style><style>
+.plotItem {display:grid;grid-template-columns:1fr 44px 2ch 44px;align-items:center;gap:.45rem;margin:.3rem 0}
+.plotItem button {min-height:44px;border-radius:12px;font-size:1.1rem}
+.plotItem output {text-align:center}
+.plotItems {margin:1rem 0}
+</style>
+<style>.themeCover{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;background:#f3eef9;padding:1rem;min-height:7rem}.themeCover img{width:100%;height:auto;object-fit:contain}</style>
+</head><body><header><div class="inner"><h1>🌙 WishPort</h1><p>Your pocketful of magic · ACNH Order Builder</p><span class="releaseTag">✨ Expanded variation catalog · Nov 11</span><span class="heroTag">💜 Browse, filter and order · 40-slot pocket · $order</span></div></header><main>
+<section class="panel wpWelcome" aria-label="Welcome to WishPort">
+  <strong>💜 Welcome to WishPort!</strong>
+  <p>Find your favorite ACNH items, build a pocket of up to 40 items, and copy your order to Discord.</p>
+  <details class="wpHowTo" id="wishportHowTo">
+    <summary>📖 How to Order <span class="wpSummaryHint">Quick guide</span></summary>
+    <div class="wpHowToBody">
+      <ol>
+        <li><strong>Find your items.</strong> Search the Database or choose a ready-made Collection. Pick the color or variation you want when available.</li>
+        <li><strong>Fill your pocket.</strong> Tap <strong>+ Add item</strong> to add items immediately. You can choose up to <strong>40 item slots</strong>. Materials that support stacks show their stack sizes.</li>
+        <li><strong>Optional villager.</strong> Open <strong>Villagers</strong> and choose one if you have an <strong>open plot</strong> on your island.</li>
+        <li><strong>Check your order.</strong> Tap <strong>View Order</strong> to check your items, quantities, and optional filler choice.</li>
+        <li><strong>Send the command.</strong> Tap <strong>Copy order command</strong>, then paste it into the designated WishPort Discord order channel. Follow the bot's instructions for pickup.</li>
+      </ol>
+      <p class="wpGuideNote"><strong>Safety reminder:</strong> Some items and DIYs are unavailable. If WishPort or the bot flags an item, do not bypass the warning. See Help &amp; FAQ for details.</p>
+    </div>
+  </details>
+</section>
+
+<details class="wpSupport" id="wishportSupport">
+  <summary>❓ Help, FAQ &amp; Report a Problem <span class="wpSupportHint">Quick answers and issue reporting</span></summary>
+  <div class="wpSupportBody">
+    <h2>💜 WishPort help &amp; FAQ</h2>
+    <div class="wpFaqList">
+      <details><summary>How many items can I order?</summary><p>Each order holds up to <strong>40 pocket slots</strong>. Materials can come in full stacks when a stack size is shown. One stack takes one pocket slot.</p></details>
+      <details><summary>Can I adopt a villager with my items?</summary><p>You can request one villager alongside your items. You must have an <strong>open plot</strong> and the bot must support villager injection. Selecting a villager does not guarantee adoption.</p></details>
+      <details><summary>What happens if I don't select all 40 slots?</summary><p>Choose the default bot behavior or select Nook Miles Tickets, Royal Crowns, or 99,000 Bells as filler. Open View Order to choose, then tap Copy order command.</p></details>
+      <details><summary>How do I place my order?</summary><p>Choose your items or a Collection, tap <strong>View Order</strong>, then tap <strong>Copy order command</strong>. Paste it into WishPort's designated Discord order channel and follow the bot's response.</p></details>
+      <details><summary>What if the bot rejects my order?</summary><p>Remove the item named in the error and try again. Never bypass unsafe-item warnings. You can report the rejected item below so the catalog can be checked.</p></details>
+      <details><summary>Are the displayed colors and DIY cards always guaranteed?</summary><p>No. Some variations require additional metadata, and certain DIY cards are unavailable or unverified. An image preview is not proof that a code is safe or that a particular variation will be delivered.</p></details>
+      <details><summary>What are the Treasure Island pickup rules?</summary><p>Wait for your private Dodo Code, arrive with empty pockets, collect your requested items only, don't explore, never share your Dodo Code, and leave through the airport. Have an open plot for a villager adoption.</p></details>
+      <details><summary>Why are some items preview-only or blocked?</summary><p>Some customization variations require additional code metadata, and special DIY recipe unlocks or non-transferable assets cannot be safely ordered. WishPort screens these items, but bot validation is the final check. Never disable or bypass the bot’s safety protections.</p></details>
+      <details><summary>What about exact colors, recipe cards, and image sources?</summary><p>Basic four-character item IDs may not guarantee a chosen color or pattern. Recipe cards can require encoded metadata. Exact customization may require a verified NHI inventory. Catalog pictures use the <a href="https://docs.google.com/spreadsheets/d/13d_LAJPlxMa_DubPTuirkIV4DERBMXbrWQsmSh8ReK4" target="_blank" rel="noopener">ACNH community data spreadsheet</a>; pictures do not prove orderability.</p></details>
+      <details><summary>Where are saved orders stored?</summary><p>Saved orders stay in your current browser on the current device. They do not sync between phones or Discord accounts. Clearing browser storage can remove them.</p></details>
+    </div>
+    <section class="wpReport" aria-labelledby="wpReportHeading">
+      <h3 id="wpReportHeading">🛠️ Report a problem</h3>
+      <p>Found a wrong picture, missing item, collection issue, or rejected code? Fill this in and copy your report. <strong>It won't be sent automatically.</strong> Paste it into the appropriate WishPort Discord support conversation or send it to a moderator.</p>
+      <form id="wpReportForm">
+        <label>What's wrong?
+          <select id="wpIssueType" required><option value="">Choose an issue…</option><option>Incorrect or missing item picture</option><option>Missing or incorrectly named item</option><option>Wrong collection contents or preview</option><option>Order code rejected by bot</option><option>Wrong item variation or stack size</option><option>Website bug or broken button</option><option>Other problem</option></select>
+        </label>
+        <label>Item or collection name (if relevant)
+          <input id="wpIssueItem" type="text" maxlength="130" placeholder="e.g. artful bed (black)" autocomplete="off">
+        </label>
+        <label>Item code (optional)
+          <input id="wpIssueCode" type="text" maxlength="32" placeholder="e.g. 35DB" autocapitalize="characters" spellcheck="false">
+        </label>
+        <label>What happened? <span aria-hidden="true">*</span>
+          <textarea id="wpIssueDetails" required rows="3" maxlength="1500" placeholder="Tell us what you expected and what actually happened. Don't include your Dodo Code or personal information."></textarea>
+        </label>
+        <div class="wpReportButtons"><button type="submit" class="cta" id="wpCopyReport">📋 Copy report for Discord</button><button type="button" class="secondary" id="wpDownloadReport">Download text</button></div>
+        <p id="wpReportStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </div>
+</details>
+<section id="wpFirstTip" class="wpFirstTip" hidden aria-label="New visitor tip">
+  <div><strong>✨ First time here?</strong><p>Search for an item or browse a Collection, then use the pocket button to review your 40-slot order. Open <strong>How to Order</strong> above for step-by-step help.</p></div>
+  <button type="button" id="wpDismissTip" aria-label="Dismiss first-time tip">Got it ✓</button>
+</section>
+
+<nav class="browseTabs" aria-label="WishPort browsing modes">
+<button class="browseTab active" data-tab="database" aria-selected="true">🔎 Database</button>
+<button class="browseTab" data-tab="collections" aria-selected="false">🧺 Collections</button>
+<button class="browseTab" data-tab="plots" aria-selected="false">🏡 Starter Plots</button>
+<button class="browseTab" data-tab="villagers" aria-selected="false">🏡 Villagers</button>
+</nav>
+<section id="databasePanel" class="browsePanel">
+  <div class="explorerIntro"><strong>✨ WishPort Item Explorer</strong><span>Find your favorites, choose a variation, and build your perfect pocket.</span></div>
+  <div class="explorerToolbar">
+    <input class="search" id="search" type="search" placeholder="🔎 Search items and variations..." aria-label="Search orderable items">
+    <button type="button" class="explorerCartButton" id="explorerCart" aria-label="Open shopping cart">🛒 <span id="explorerCartCount">0 / 40</span></button>
+  </div>
+  <div class="pills" id="pills" hidden aria-hidden="true"></div>
+  <details class="wpFilterDisclosure" id="wishportFilters" open>
+    <summary><span>⚙️ Refine your search</span><span class="wpFilterHint">Category · Theme · Series · Color <span aria-hidden="true">▾</span></span></summary>
+  <div class="explorerFilterPanel">
+    <label class="toggle variationsToggle"><span><strong>Hide variations</strong><small>Show fewer color choices in search results</small></span><input type="checkbox" id="hideVariants"></label>
+    <div class="explorerFilterGrid">
+      <label class="explorerFilterField"><span>▦ CATEGORY SELECTION</span><select id="category" aria-label="Category"><option value="">All Categories</option></select></label>
+      <label class="explorerFilterField"><span>⌂ THEME SELECTION</span><select id="themeSelect" aria-label="Theme"><option value="">All Themes</option></select></label>
+      <label class="explorerFilterField"><span>▱ SERIES SELECTION</span><select id="seriesSelect" aria-label="Series"><option value="">All Series</option></select></label>
+      <label class="explorerFilterField"><span>⬡ INTERACTION TYPES</span><select id="interactionSelect" aria-label="Interaction or item type"><option value="">All Interactions</option></select></label>
+      <label class="explorerFilterField"><span>◇ COLOUR SELECTION</span><select id="colorSelect" aria-label="Color"><option value="">All Colours</option></select></label>
+    </div>
+    <details class="explorerExtra"><summary>More search options</summary><div class="filters"><label>Game version<select id="version" aria-label="Game version"><option value="">All game versions</option><option value="3.0.0">3.0 items</option><option value="2.0.0">2.0 items</option><option value="1.0.0">Original items</option></select></label><label>Sort results<select id="sort" aria-label="Sort"><option value="default">Default order</option><option value="az">Name A–Z</option><option value="za">Name Z–A</option></select></label></div></details>
+    <div class="filterSettings"><label class="toggle hiddenCompat"><input type="checkbox" id="showVariants" checked>Show variants</label><button type="button" id="resetFilters" class="secondary">Clear filters</button></div>
+  </div>
+</details>
+  <p class="expandedInfo">Choose your favorite items and colors. Some variations are preview-only. For ordering limitations, see Help &amp; FAQ.</p><div class="subhead"><strong id="summary">Loading catalog…</strong><span id="currentPage"></span></div>
+  <div class="pages topPages" id="pagesTop" aria-label="Catalog pagination above items"></div>
+  <div id="grid" class="grid"></div>
+  <div class="pages bottomPages" id="pages" aria-label="Catalog pagination below items"></div>
+  <div class="browseJump"><label>Jump to page <input type="number" inputmode="numeric" id="jumpPage" value="1" min="1" /></label><button id="goPage" class="cta" type="button">Go</button><label>Items per page <select id="pageSize"><option value="25">25 items</option><option value="50" selected>50 items</option><option value="100">100 items</option></select></label></div>
+  <section class="panel status" style="margin-top:15px"><strong>Order safety:</strong> WishPort checks item codes, but the Discord bot makes the final safety decision. Do not bypass blocked-item warnings. More details are in Help &amp; FAQ.</section>
+</section>
+<section id="plotsPanel" class="browsePanel" hidden><div class="sectionIntro"><h2>🏡 Starter Plot Furniture</h2><p>Match each selection to your plot sign, then use + or − for individual items or add all six together.</p></div>
+<form class="orderToolbox starterPlot" data-fixed="pot"><h3>Plot 1</h3><p>Interior · pot</p>
+<p><label>Native fruit<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
+<option value="apple chair|juicy-apple tv">apple chair, juicy-apple TV</option>
+<option value="cherry speakers|cherry lamp">cherry speakers, cherry lamp</option>
+<option value="orange end table|orange wall-mounted clock">orange end table, orange wall-mounted clock</option>
+<option value="peach chair|peach surprise box">peach chair, peach surprise box</option>
+<option value="pear wardrobe|pear bed">pear wardrobe, pear bed</option>
+</select></label></p>
+<p><label>Exterior furniture<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
+<option value="stone stool|stone table|clothesline">stone stool, stone table, clothesline</option>
+<option value="hay bed|swinging bench|barrel">hay bed, swinging bench, barrel</option>
+</select></label></p>
+<div class="plotItems"></div>
+<button class="cta" type="submit">Add Plot 1 · 6 items</button><p role="status"></p></form>
+<form class="orderToolbox starterPlot" data-fixed="wooden-block stereo|wooden-block table"><h3>Plot 2</h3><p>Interior · wooden-block stereo, wooden-block table</p>
+<p><label>Native flower wreath<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
+<option value="cosmos wreath">cosmos wreath</option>
+<option value="hyacinth wreath">hyacinth wreath</option>
+<option value="lily wreath">lily wreath</option>
+<option value="mum wreath">mum wreath</option>
+<option value="pansy wreath">pansy wreath</option>
+<option value="rose wreath">rose wreath</option>
+<option value="tulip wreath">tulip wreath</option>
+<option value="windflower wreath">windflower wreath</option>
+</select></label></p>
+<p><label>Exterior furniture<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
+<option value="natural garden chair|natural garden table|birdbath">natural garden chair, natural garden table, birdbath</option>
+<option value="iron garden chair|iron garden table|birdhouse">iron garden chair, iron garden table, birdhouse</option>
+</select></label></p>
+<div class="plotItems"></div>
+<button class="cta" type="submit">Add Plot 2 · 6 items</button><p role="status"></p></form>
+<form class="orderToolbox starterPlot" data-fixed="wooden simple bed|wooden chair|classic pitcher"><h3>Plot 3</h3><p>Interior · wooden simple bed, wooden chair, classic pitcher</p>
+<p><label>Exterior furniture<select required style="display:block;width:100%;max-width:100%"><option value="">Choose from your sign…</option>
+<option value="log garden lounge|log stool|water pump">log garden lounge, log stool, water pump</option>
+<option value="log dining table|log bench|wooden bucket">log dining table, log bench, wooden bucket</option>
+</select></label></p>
+<div class="plotItems"></div>
+<button class="cta" type="submit">Add Plot 3 · 6 items</button><p role="status"></p></form>
+</section>
+<section id="collectionsPanel" class="browsePanel" hidden>
+<div class="sectionIntro"><h2>✨ Ready-made collections</h2><p>Browse island themes and ready-made rooms. Open a theme to pick individual items or add the full collection.</p></div>
+<input class="search" type="search" id="collectionSearch" placeholder="🔎 Search collections…" aria-label="Search collections">
+<div class="collectionGrid" id="collectionsGrid"></div>
+</section>
+<section id="categoriesPanel" class="browsePanel" hidden>
+<div class="sectionIntro"><h2>🗂️ Shop by category</h2><p>Pick a section to explore all its items, colors, and variations.</p></div>
+<div class="materialsFeature"><div><strong>🪵 Materials</strong><p>Wood, iron, clay, stone, star fragments, seasonal materials and more. Choose full stacks where available.</p></div><button class="cta" id="shopMaterials" type="button">Shop Materials</button></div>
+<div class="categoryGrid" id="categoryGrid"></div>
+</section>
+<section id="villagersPanel" class="browsePanel" hidden>
+<div class="sectionIntro"><h2>🏡 Find your dream villager</h2><p>Choose a villager to include with your WishPort order. Visitors must have an open plot to invite the villager. The bot must have villager injection enabled.</p></div>
+<input class="search" id="villagerSearch" type="search" placeholder="🔎 Search villagers (Raymond, Judy, Sasha…)" aria-label="Search villagers">
+<div class="filters"><select id="villagerSpecies" aria-label="Villager species"><option value="">All species</option></select><select id="villagerPersonality" aria-label="Villager personality"><option value="">All personalities</option></select></div>
+<div id="selectedVillager" class="selectedVillager" hidden></div>
+<div class="subhead"><strong id="villagerSummary">Loading villagers…</strong><span id="villagerPage"></span></div>
+<div id="villagerGrid" class="villagerGrid"></div><div id="villagerPages" class="pages"></div>
+<p class="hint">Villagers are matched to internal character codes from the ACNH spreadsheet. When selected, their code is appended to the <code>$order</code> command. WishPort injects a villager into its first save slot, potentially overwriting the resident already there. Confirm your bot supports the selected villager before processing.</p>
+</section></main><section id="cartModal" class="cartPage" hidden aria-label="WishPort order cart"><div class="cartPageInner"><div class="cartPageHead"><button class="secondary" id="backShopping" type="button">← Back to items</button><h2>POCKET<br>INVENTORY</h2></div>
+<div class="cartOverview"><strong id="cartCount">Items 0/40</strong><strong id="villagerCount">Villager requested 0/1</strong></div><div class="cartLinkRow"><button class="cta" type="button" id="addMoreCart">+ Add more items</button><button class="secondary" type="button" id="addVillagerCart">+ Add a villager</button></div>
+<div class="cartProgress"><div id="cartProgressBar"></div></div><h3 class="cartSectionTitle">REQUESTED ITEMS</h3><div id="cartList" class="requestedCards"></div><div id="slots" class="slots" hidden style="display:none !important" aria-hidden="true"></div><h3 class="cartSectionTitle">REQUESTED VILLAGER</h3><div id="cartVillager" class="cartVillager"></div>
+<div id="remainingOptions" class="fillOptions" role="group" aria-label="Unused pocket slots">
+<h3 id="remainingHeading">Unused pocket slots</h3>
+<label><input type="radio" name="fill" value="default" checked><span><strong>Default bot behavior</strong><small>Leave extra slots unchanged; SysBot determines how to fill the order.</small></span></label>
+<label><input type="radio" name="fill" value="nmt"><span><strong>Fill remaining slots with Nook Miles Tickets</strong><small>Uses item code 16DB</small></span></label>
+<label><input type="radio" name="fill" value="crowns"><span><strong>Fill remaining slots with Royal Crowns</strong><small>Uses item code 14BB</small></span></label>
+<label><input type="radio" name="fill" value="bells"><span><strong>Fill remaining slots with 99,000 Bells</strong><small>Uses item code 08A4</small></span></label>
+<p class="hint" id="fillPreview" aria-live="polite"></p></div><h3 class="cartSectionTitle">MY ORDER COMMAND</h3><div class="actions"><button class="secondary dangerOutline" id="clear" type="button">Clear entire order</button><button class="cta" id="copy" type="button">Copy order command</button></div><textarea readonly class="code" id="command" aria-label="Generated order command"></textarea><p class="msg" id="copyMsg"></p><p class="hint">Paste your copied command into WishPort's Discord order channel. Keep your bot's inventory safety checks enabled.</p><div class="wpOrderSecondary"><section class="orderToolbox" aria-label="Save and manage your order">
+<h3>💾 Save your order</h3><p class="hint">Keep a named copy on this device, even after clearing your current cart. Saved orders stay in this browser only.</p>
+<div class="saveOrderRow"><input id="saveOrderName" type="text" maxlength="55" placeholder="e.g. My cottagecore order" aria-label="Order name"><button class="secondary" id="saveNamedOrder" type="button">Save order</button></div>
+<div class="saveOrderRow"><select id="savedOrderList" aria-label="Saved orders"><option value="">Choose a saved order…</option></select><button class="secondary" id="restoreSavedOrder" type="button">Load</button><button class="secondary" id="deleteSavedOrder" type="button">Delete</button></div>
+<p class="hint" id="saveOrderNotice" role="status"></p></section>
+<details class="pickupSteps"><summary>✈️ What happens after I order?</summary><ol><li>Check your items and tap <strong>Copy order command</strong>.</li><li>Paste it into the correct WishPort Discord order channel.</li><li>Wait for the bot to accept your order and send your private Dodo Code when it is your turn. A received command is not a confirmed booking or delivery.</li><li>Arrive with empty pockets and enough inventory space for your items. Have an open housing plot if adopting a villager.</li><li>Collect only your order, follow the island rules, and leave through the airport. Never share the Dodo Code.</li></ol><p>Bot replies and timing vary. If WishPort rejects a code as unsafe, do not bypass its safety checks.</p></details>
+<button type="button" id="wpCartHelp" class="wpCartHelp secondary">❓ Need help or want to report an issue?</button></div></div></section>
+<section id="reviewModal" class="reviewOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="reviewTitle"><div class="reviewCard"><h2 id="reviewTitle">💜 Review your WishPort order</h2><p class="hint">Double-check everything before copying. This does not submit an order to Discord.</p><div id="reviewStats" class="reviewStats"></div><div id="reviewItems" class="reviewItemList"></div><div id="reviewWarnings" class="reviewWarnings" role="status"></div><p class="hint">Item-code structure is checked locally, but bot compatibility, pickup safety, and exact variations are not guaranteed. Keep SysBot's inventory validation enabled.</p><div class="reviewActions"><button class="secondary" id="backToOrder" type="button">← Edit order</button><button class="cta" id="confirmCopy" type="button">Copy $order command</button></div><p class="msg" id="reviewCopyMsg" role="status"></p></div></section><div class="dock"><div class="dockInner"><span id="qty" hidden>0</span><span id="pocketFull" role="status"></span><button class="cta" id="openCart">View Order · 0/40</button></div></div><div id="modal" class="shade" role="dialog" aria-modal="true" aria-label="Choose item variation"><div class="sheet"><div class="sheetHead"><h2 id="modalTitle">Select item</h2><button class="x" data-close="modal" aria-label="Close">×</button></div><div id="variantContent"></div></div></div><div id="collectionModal" class="shade" role="dialog" aria-modal="true" aria-label="Collection preview"><div class="sheet"><div class="sheetHead"><h2 id="collectionTitle">Collection</h2><button class="x" data-close="collectionModal" aria-label="Close">×</button></div><p id="collectionDescription" class="hint"></p><div class="collectionPreview" id="collectionPreview"></div><button class="cta" style="width:100%;margin-top:12px" id="addCollection">Add collection to pocket</button><p class="hint">Each preset uses real names from the catalog. The generator uses item hex codes. Exact colors may require an NHI inventory.</p></div></div>
+<button type="button" id="wpBackTop" class="wpBackTop" hidden aria-label="Back to top" title="Back to top">↑ <span>Top</span></button>
+<script src="wishport-help.js?v=20261111-help-v1"></script>
+<script src="catalog-data.js?v=20261111-explorer-v4"></script>
+<script src="catalog-nature-restored.js?v=20261113-other-images-4"></script>
+<script src="villagers-data.js?v=20261111-explorer-v4"></script>
+<script src="catalog-expansion.js?v=20261111-variations-v1"></script>
+<script src="collection-presets.js?v=island-themes-1"></script>
+<script src="catalog-reference.js?v=20261113"></script>
+<script src="app-wishport-20261113.js?v=island-themes-1"></script>
+<style>
+  button { touch-action: manipulation; }
+  @media (pointer: coarse) {
+    html body :is(input:not([type=checkbox]):not([type=radio]), select, textarea) {
+      font-size: max(16px, 1rem) !important;
+    }
+  }
+</style>
+</body></html>
