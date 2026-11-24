@@ -446,7 +446,9 @@ for(const item of items){
 }
 const collections=presetRows.map((p,id)=>{
  if(p.group){
-  const entries=(p.catalogNames||[]).flatMap(name=>catalogByName.get(name)||[]);
+  const candidates=(p.catalogNames||[]).flatMap(name=>catalogByName.get(name)||[]);
+  const byCode=new Map(candidates.map(item=>[orderCode(item).padStart(16,'0'),item]));
+  const entries=p.curated?p.codes.map(code=>byCode.get(code)).filter(Boolean):candidates;
   return {id,name:p.name,group:p.group,items:entries,coverItems:p.codes.slice(0,4).map(code=>entries.find(x=>orderCode(x).padStart(16,'0')===code)).filter(Boolean)};
  }
  return {id,name:p.name,cover:p.cover,items:p.codes.map(hex=>{
