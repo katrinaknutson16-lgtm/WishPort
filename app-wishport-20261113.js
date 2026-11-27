@@ -133,7 +133,7 @@ eventTab.className = 'browseTab';
 eventTab.dataset.tab = 'events';
 eventTab.setAttribute('aria-selected', 'false');
 eventTab.textContent = '🎉 Special Events';
-document.querySelector('[data-tab="collections"]').after(eventTab);
+document.querySelector('[data-tab="themes"]').after(eventTab);
 const eventFilters = document.createElement('div');
 eventFilters.hidden = true;
 eventFilters.innerHTML = '<h2>Special Events</h2><label class="explorerFilterField">Event<select></select></label><label class="explorerFilterField">Show<select><option value="">Items and recipes</option><option value="items">Items only</option><option value="recipes">DIY and cooking recipes</option></select></label>';
@@ -424,7 +424,7 @@ function activateTab(tab){
   $('resetFilters').click();
  }
  const panel = enteringEvents ? 'database' : tab;
-if(tab==='plots')plotForms.forEach(refreshPlotItems);if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','categories','villagers','plots'].forEach(name=>$(name+'Panel').hidden=name!==panel);}
+if(tab==='plots')plotForms.forEach(refreshPlotItems);if(tab==='database'&&filtered.length)render();tabs.forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});['database','collections','themes','categories','villagers','plots'].forEach(name=>$(name+'Panel').hidden=name!==panel);}
 tabs.forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 const catCounts=new Map();items.forEach(x=>catCounts.set(categoryFor(x),(catCounts.get(categoryFor(x))||0)+1));
 $('categoryGrid').innerHTML=[...catCounts.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([c,n])=>`<button class="categoryTile" data-cat="${esc(c)}"><span class="categorySymbol" aria-hidden="true">${esc(c.slice(0,1).toUpperCase())}</span><span class="categoryLabel">${esc(c)}</span><span class="categoryCount">${n.toLocaleString()} items</span></button>`).join('');
@@ -459,10 +459,10 @@ const collections=presetRows.map((p,id)=>{
 function coverMarkup(c){
  if(c.group) return '<div class="themeCover">'+c.coverItems.map(x=>`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="${esc(x.name)}" loading="lazy">`).join('')+'</div>';
  return `<div class="collectionCover realRoomCover"><img src="${esc(c.cover)}" loading="lazy" alt="Actual Animal Crossing New Horizons room preview: ${esc(c.name)}"><span class="roomPreviewBadge">ACTUAL ACNH ROOM</span></div>`;}
-function renderCollections(){
- const q=$('collectionSearch').value.trim().toLowerCase();
- const found=collections.filter(x=>(x.name+' '+(x.group||'')).toLowerCase().includes(q));
- $('collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.group||'Original curated ACNH room collection')}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ${c.group?"ENTRIES":"ITEMS"}</span><button class="collectionBtn" data-collection="${c.id}">View collection</button></div>${c.group?'':`<button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button>`}</div></article>`).join(''):'<p class="empty">No matching collections.</p>';
+function renderCollections(themes){
+ const q=$(themes?'islandThemeSearch':'collectionSearch').value.trim().toLowerCase();
+ const found=collections.filter(x=>Boolean(x.group)===themes && (x.name+' '+(x.group||'')).toLowerCase().includes(q));
+ $(themes?'themesGrid':'collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.group||'Original curated ACNH room collection')}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ${c.group?"ENTRIES":"ITEMS"}</span><button class="collectionBtn" data-collection="${c.id}">${c.group?'View theme':'View room'}</button></div>${c.group?'':`<button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button>`}</div></article>`).join(''):'<p class="empty">No matching collections.</p>';
 }
 let selectedCollection=null;
 function addPreset(c){
@@ -476,7 +476,7 @@ function addPreset(c){
  pocket=c.items.map(x=>({name:x.name,category:x.category,hex:x.hex,variation:x.variation||'',pattern:x.pattern||''}));
  savePocket();hide('collectionModal');cart();show('cartModal');
 }
-$('collectionsGrid').onclick=e=>{
+$('themesGrid').onclick=$('collectionsGrid').onclick=e=>{
  const add=e.target.closest('[data-add-collection]');if(add){addPreset(collections[+add.dataset.addCollection]);return;}
  const b=e.target.closest('[data-collection]');if(!b)return;
  selectedCollection=collections[+b.dataset.collection];
@@ -520,10 +520,12 @@ $('collectionPreview').onclick=e=>{
  addDirect(visibleThemeItems[Number(b.dataset.themeItem)],b);
  $('themePocket').textContent=pocket.length+' / 40 slots used';
 };
-$('collectionSearch').oninput=renderCollections;
+$('collectionSearch').oninput=()=>renderCollections(false);
+$('islandThemeSearch').oninput=()=>renderCollections(true);
 $('addCollection').onclick=()=>addPreset(selectedCollection);
 $('collectionModal').addEventListener('click',e=>{if(e.target===$('collectionModal'))hide('collectionModal')});
-renderCollections();
+renderCollections(false);
+renderCollections(true);
 
 // Dream villager browser: actual ACNH villagers and their internal IDs, not invented names.
 const villagers=window.WISHPORT_VILLAGERS||[];

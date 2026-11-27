@@ -88,6 +88,7 @@
 <nav class="browseTabs" aria-label="WishPort browsing modes">
 <button class="browseTab active" data-tab="database" aria-selected="true">🔎 Database</button>
 <button class="browseTab" data-tab="collections" aria-selected="false">🧺 Collections</button>
+<button class="browseTab" data-tab="themes" aria-selected="false">🌿 Island Themes</button>
 <button class="browseTab" data-tab="plots" aria-selected="false">🏡 Starter Plots</button>
 <button class="browseTab" data-tab="villagers" aria-selected="false">🏡 Villagers</button>
 </nav>
@@ -161,9 +162,14 @@
 <button class="cta" type="submit">Add Plot 3 · 6 items</button><p role="status"></p></form>
 </section>
 <section id="collectionsPanel" class="browsePanel" hidden>
-<div class="sectionIntro"><h2>✨ Ready-made collections</h2><p>Browse island themes and ready-made rooms. Search each theme for items, variations, and DIYs to add to your order.</p></div>
-<input class="search" type="search" id="collectionSearch" placeholder="🔎 Search collections…" aria-label="Search collections">
+<div class="sectionIntro"><h2>🧺 Room Collections</h2><p>Preview a furnished room and add its items to your order.</p></div>
+<input class="search" type="search" id="collectionSearch" placeholder="🔎 Search rooms…" aria-label="Search rooms">
 <div class="collectionGrid" id="collectionsGrid"></div>
+</section>
+<section id="themesPanel" class="browsePanel" hidden>
+<div class="sectionIntro"><h2>🌿 Island Themes</h2><p>Choose a theme to browse its items and build your order.</p></div>
+<input class="search" type="search" id="islandThemeSearch" placeholder="🔎 Search island themes…" aria-label="Search island themes">
+<div class="collectionGrid" id="themesGrid"></div>
 </section>
 <section id="categoriesPanel" class="browsePanel" hidden>
 <div class="sectionIntro"><h2>🗂️ Shop by category</h2><p>Pick a section to explore all its items, colors, and variations.</p></div>
@@ -203,7 +209,7 @@
 <script src="catalog-expansion.js?v=20261111-variations-v1"></script>
 <script src="collection-presets.js?v=full-theme-lists-2"></script>
 <script src="catalog-reference.js?v=20261113"></script>
-<script src="app-wishport-20261113.js?v=full-theme-lists-2"></script>
+<script src="app-wishport-20261113.js?v=island-themes-tab"></script>
 <style>
   button { touch-action: manipulation; }
   @media (pointer: coarse) {
