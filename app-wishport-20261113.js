@@ -456,35 +456,71 @@ const collections=presetRows.map((p,id)=>{
   return {name:original?.name||'ACNH item #'+hex.slice(-4),category:original?.category||'',image:original?.image||'',hex,variation:original?.variationPreset||'',pattern:original?.patternPreset||''};
  })};
 });
+const importedCatalog = new Map();
+for (const item of items) {
+ if(disallowedOrderEntry(item))continue;
+ const code=orderCode(item);
+ importedCatalog.set(exactKey(item.name,code.length===4?code.padStart(16,'0'):code),item);
+}
+const importedCollections=(window.WISHPORT_IMPORTED_COLLECTIONS||[]).map((collection,index)=>{
+ const entries=collection.items.flatMap(([name,variation,category,code,image,quantity])=>{
+  const catalogItem=importedCatalog.get(exactKey(name,code));
+  const entry={name,variation,category:catalogItem?.category||category,image,hex:code,
+   orderType:catalogItem?.orderType,recipeId:catalogItem?.recipeId};
+  return Array.from({length:quantity},()=>entry);
+ });
+ return {...collection,id:collections.length+index,items:entries};
+});
+collections.push(...importedCollections);
+
 function coverMarkup(c){
  if(c.group) return '<div class="themeCover">'+c.coverItems.map(x=>`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="${esc(x.name)}" loading="lazy">`).join('')+'</div>';
- return `<div class="collectionCover realRoomCover"><img src="${esc(c.cover)}" loading="lazy" alt="Actual Animal Crossing New Horizons room preview: ${esc(c.name)}"><span class="roomPreviewBadge">ACTUAL ACNH ROOM</span></div>`;}
+ return `<div class="collectionCover realRoomCover"><img src="${esc(c.cover)}" loading="lazy" alt="${esc(c.name)} collection preview">${c.source?"":'<span class="roomPreviewBadge">ACTUAL ACNH ROOM</span>'}</div>`;}
 function renderCollections(themes){
  const q=$(themes?'islandThemeSearch':'collectionSearch').value.trim().toLowerCase();
  const found=collections.filter(x=>Boolean(x.group)===themes && (x.name+' '+(x.group||'')).toLowerCase().includes(q));
- $(themes?'themesGrid':'collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3><p>${esc(c.group||'Original curated ACNH room collection')}</p><div class="collectionFooter"><span class="countTag">${c.items.length} ${c.group?"ENTRIES":"ITEMS"}</span><button class="collectionBtn" data-collection="${c.id}">${c.group?'View theme':'View room'}</button></div>${c.group?'':`<button class="cta collectionAddQuick" data-add-collection="${c.id}">Add collection</button>`}</div></article>`).join(''):'<p class="empty">No matching collections.</p>';
+ $(themes?'themesGrid':'collectionsGrid').innerHTML=found.length?found.map(c=>`<article class="collectionCard">${coverMarkup(c)}<div class="collectionBody"><h3>${esc(c.name)}</h3>${c.source?'':`<p>${esc(c.group||'Original curated ACNH room collection')}</p>`}<div class="collectionFooter"><span class="countTag">${c.items.length} ${c.group?"ENTRIES":"ITEMS"}</span><button class="collectionBtn" data-collection="${c.id}">${c.group?'View theme':'View room'}</button></div>${c.group?'':`<button class="cta collectionAddQuick" data-add-collection="${c.id}">${c.source&&c.items.length>40?"View orders":"Add collection"}</button>`}</div></article>`).join(''):'<p class="empty">No matching collections.</p>';
 }
 let selectedCollection=null;
 function addPreset(c){
  if(!c||!c.items.length||c.items.length>40)return;
- const invalidRaw=c.items.map((x,i)=>({slot:i+1,code:String(x.hex||'')})).filter(x=>!/^[0-9A-F]{16}$/i.test(x.code));
+ const invalidRaw=c.items.map((x,i)=>({slot:i+1,code:String(x.hex||'')})).filter(x=>c.source?!supportedItemCode(c.items[x.slot-1],x.code):!/^[0-9A-F]{16}$/i.test(x.code));
  if(invalidRaw.length){alert(c.name+' includes invalid preset code(s): '+invalidRaw.map(x=>'slot '+x.slot+' ('+x.code+')').join(', ')+'. The collection was not added.');return;}
  if(pocket.length&& !confirm('Replace your current pocket with this preset?'))return;
  // Preserve raw per-slot metadata. Never derive order strings from display names.
  const unsafe=c.items.filter(x=>disallowedOrderEntry(x));
  if(unsafe.length){alert('Cannot add '+c.name+' because '+unsafe.length+' item slot(s) need attention:\n'+issueSummary(c.items,8).replace(/; /g,'\n')+'\n\nNo items were added. Please report the named item if you believe this is a mistake.');return;}
- pocket=c.items.map(x=>({name:x.name,category:x.category,hex:x.hex,variation:x.variation||'',pattern:x.pattern||''}));
+ pocket=c.items.map(x=>({name:x.name,category:x.category,hex:x.hex,variation:x.variation||'',pattern:x.pattern||'',orderType:x.orderType,recipeId:x.recipeId}));
  savePocket();hide('collectionModal');cart();show('cartModal');
 }
 $('themesGrid').onclick=$('collectionsGrid').onclick=e=>{
- const add=e.target.closest('[data-add-collection]');if(add){addPreset(collections[+add.dataset.addCollection]);return;}
- const b=e.target.closest('[data-collection]');if(!b)return;
- selectedCollection=collections[+b.dataset.collection];
+ const add=e.target.closest('[data-add-collection]');if(add){
+  const collection=collections[+add.dataset.addCollection];
+  if(!collection.source||collection.items.length<=40){addPreset(collection);return;}
+ }
+ const b=e.target.closest('[data-collection]');if(!add&&!b)return;
+ selectedCollection=collections[+(b?.dataset.collection??add.dataset.addCollection)];
  $('collectionTitle').textContent=selectedCollection.name;
- $('collectionDescription').textContent=selectedCollection.group||'Original ACNH room photo · original provided order codes';
+ $('collectionDescription').textContent=selectedCollection.group||(selectedCollection.source?'Items, variants, and quantities included in this collection.':'Original ACNH room photo · original provided order codes');
  const theme=!!selectedCollection.group;
  $('themeTools').hidden=!theme;
- $('addCollection').hidden=theme;
+ const batches=$('collectionOrderParts');
+ const split=Boolean(selectedCollection.source&&selectedCollection.items.length>40);
+ $('addCollection').hidden=theme||split;
+ batches.hidden=!split;
+ batches.replaceChildren();
+ if(split){
+  for(let start=0;start<selectedCollection.items.length;start+=40){
+   const batch=selectedCollection.items.slice(start,start+40);
+   const button=document.createElement('button');
+   button.type='button';button.className='collectionBtn';
+   button.textContent='Add order '+(start/40+1)+' · '+batch.length+' items';
+   const collection={...selectedCollection,items:batch};
+   button.onclick=()=>addPreset(collection);
+   batches.appendChild(button);
+  }
+ }
+
  $('themeQuery').value='';
  $('themePageNav').hidden=!theme;
  themePage=0;
@@ -507,7 +543,7 @@ function renderCollectionItems(){
  $('themePageInfo').textContent='Page '+(themePage+1)+' of '+pages+' · '+visibleThemeItems.length+' entries';
  $('themePocket').textContent=pocket.length+' / 40 slots used';
  $('collectionPreview').innerHTML=pageItems.map((x,i)=>{
-  const label=theme?[x.name,isDIY(x)?'DIY recipe':x.variationLabel].filter(Boolean).join(' · '):x.name;
+  const label=theme?[x.name,isDIY(x)?'DIY recipe':x.variationLabel].filter(Boolean).join(' · '):[x.name,x.variation].filter(Boolean).join(' · ');
   return `<div class="presetItem"><span>${start+i+1}.</span>${x.image?`<img src="${esc(imageURL(x.image))}" data-original="${esc(x.image)}" onerror="window.wishportImageError(this)" alt="" loading="lazy">`:''}<span>${esc(label)}</span>${theme?`<button type="button" class="secondary" data-theme-item="${start+i}" aria-label="Add ${esc(label)}">Add</button>`:`<code>${esc(x.hex)}</code>`}</div>`;
  }).join('')||'<p>No matching items.</p>';
 }
